@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 
-import Home from './Home';
-import Page1 from './Page1';
+import Home from './Home/App';
+import Add from './Home/Add';
 import Page2 from './Page2';
 import Page3 from './Page3';
 
@@ -17,13 +17,29 @@ export default function App() {
 
   const [page, setPage] = useState('home');
 
+  // 1. เพิ่ม State สำหรับเก็บรายการธุรกรรมทั้งหมด
+  const [transactions, setTransactions] = useState<any[]>([]);
+
+  // 2. เพิ่มฟังก์ชันสำหรับรับบันทึกข้อมูลจากหน้า Add
+  const handleSaveTransaction = (newTransaction: any) => {
+    setTransactions([newTransaction, ...transactions]);
+    setPage('home');
+  };
+
   return (
     <View style={styles.container}>
 
       {/* PAGE CONTENT */}
 
-        {page === 'home' && <Home />}
-        {page === 'page1' && <Page1 />}
+        {/* ส่ง transactions ไปให้ Home แสดงผล */}
+        {page === 'home' && <Home transactions={transactions} />}
+
+        {page === 'page1' && (
+          <Add 
+            onSave={handleSaveTransaction} 
+            onBack={() => setPage('home')} 
+          />
+        )}
         {page === 'page2' && <Page2 />}
         {page === 'page3' && <Page3 />}
 
