@@ -7,7 +7,7 @@ export default function App() {
       <ScrollView 
       style={styles.scrollView}
       contentContainerStyle={styles.scrollContent}>
-        <Text>Open up App.tsx to start working on your app!</Text>
+        <Text>This is Page2</Text>
         <StatusBar style="auto" />
       </ScrollView>
     </View>
