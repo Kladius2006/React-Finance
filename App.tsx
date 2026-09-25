@@ -21,10 +21,6 @@ export default function App() {
     <View style={styles.container}>
 
       {/* PAGE CONTENT */}
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-      >
 
         {page === 'home' && <Home />}
         {page === 'page1' && <Page1 />}
@@ -32,8 +28,6 @@ export default function App() {
         {page === 'page3' && <Page3 />}
 
         <StatusBar style="auto" />
-
-      </ScrollView>
 
 
       {/* BOTTOM MENU */}
@@ -85,8 +79,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 
   scrollView: {

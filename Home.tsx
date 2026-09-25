@@ -4,10 +4,13 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-nati
 export default function App() {
   return (
     <View style={styles.container}>
+      <Text style={styles.Title}>
+        HOME
+      </Text>
       <ScrollView 
       style={styles.scrollView}
       contentContainerStyle={styles.scrollContent}>
-        <Text>Open up App.tsx to start working on your app!</Text>
+        <Text>Content</Text>
         <StatusBar style="auto" />
       </ScrollView>
     </View>
@@ -18,8 +21,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   scrollView: {
     flex: 1,
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
   backgroundColor: "#207820",
   },
   Title: {
+    textAlign: 'center',
     fontSize: 30,
     fontWeight: "bold",
   },
