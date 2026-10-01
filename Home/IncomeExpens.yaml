@@ -14,7 +14,8 @@ appId: com.anonymous.ReactFinance
     id: "Save" 
 - tapOn: 
     id: "IncomeExpense"
-- tapOn: "รายรับ"
+- tapOn:
+    id: "Income"
 - tapOn:
     id: "Amount"
 - inputText: "500"
