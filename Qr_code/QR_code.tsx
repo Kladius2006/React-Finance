@@ -74,6 +74,7 @@ export default function GroupBillSplitUI() {
           <Text style={styles.sectionTitle}>ยอดบิลรวมทั้งหมด (บาท)</Text>
           <View style={styles.inputContainer}>
             <TextInput
+              testID="input_Value"
               style={styles.inputField}
               placeholder="0.00"
               keyboardType="numeric"
@@ -87,7 +88,7 @@ export default function GroupBillSplitUI() {
         {/* 3. รายชื่อผู้ร่วมหาร */}
         <View style={styles.listHeader}>
           <Text style={styles.subTitle}>ผู้ร่วมหาร ({participants.length} คน)</Text>
-          <TouchableOpacity style={styles.addCircleButton} onPress={() => setAddModalVisible(true)}>
+          <TouchableOpacity testID="add_participant__button" style={styles.addCircleButton} onPress={() => setAddModalVisible(true)}>
             <FontAwesome5 name="plus" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -97,7 +98,7 @@ export default function GroupBillSplitUI() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 20 }}
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.userRow} onPress={() => openQRModal(item)}>
+            <TouchableOpacity testID={`user_row_${item.name}__button`} style={styles.userRow} onPress={() => openQRModal(item)}>
               <Ionicons name="person-circle" size={55} color="#3b5998" />
               <View style={styles.userBadge}>
                 <Text style={styles.userNameText}>{item.name}</Text>
@@ -118,6 +119,7 @@ export default function GroupBillSplitUI() {
           <View style={styles.addModalContent}>
             <Text style={styles.modalTitle}>เพิ่มผู้ร่วมหาร</Text>
             <TextInput
+              testID="add_participant_name"
               style={styles.addModalInput}
               placeholder="พิมพ์ชื่อเพื่อน..."
               value={newParticipantName}
@@ -126,10 +128,10 @@ export default function GroupBillSplitUI() {
               keyboardType='default'
             />
             <View style={styles.addModalActions}>
-              <TouchableOpacity style={styles.cancelBtn} onPress={() => setAddModalVisible(false)}>
+              <TouchableOpacity testID="cancel_add_button" style={styles.cancelBtn} onPress={() => setAddModalVisible(false)}>
                 <Text style={styles.cancelBtnText}>ยกเลิก</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.confirmBtn} onPress={handleAddParticipant}>
+              <TouchableOpacity testID="confirm_add_button" style={styles.confirmBtn} onPress={handleAddParticipant}>
                 <Text style={styles.confirmBtnText}>เพิ่ม</Text>
               </TouchableOpacity>
             </View>
@@ -141,7 +143,7 @@ export default function GroupBillSplitUI() {
       <Modal visible={qrModalVisible} transparent={true} animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.qrModalContent}>
-            <TouchableOpacity style={styles.closeModalButton} onPress={() => setQrModalVisible(false)}>
+            <TouchableOpacity testID="close_qr_button" style={styles.closeModalButton} onPress={() => setQrModalVisible(false)}>
               <FontAwesome5 name="times" size={24} color="#666" />
             </TouchableOpacity>
 
