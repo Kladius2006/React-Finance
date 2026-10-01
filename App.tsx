@@ -80,6 +80,7 @@ export default function App() {
         {/* PAGE3 */}
         <TouchableOpacity
           style={styles.menuButton}
+          testID = 'QRcode'
           onPress={() => setPage('page3')}
         >
           <Text style={styles.menuItem}>S</Text>

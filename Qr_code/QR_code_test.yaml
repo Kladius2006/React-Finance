@@ -1,8 +1,8 @@
-appId: com.yourcompany.finance 
+appId: com.anonymous.ReactFinance
 ---
 - launchApp
-- clearState
-
+- tapOn:
+    id: "QRcode"
 - assertVisible: "การหารบิลกลุ่ม"
 
 - tapOn:
