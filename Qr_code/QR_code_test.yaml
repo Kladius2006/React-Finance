@@ -1,0 +1,33 @@
+appId: com.yourcompany.finance 
+---
+- launchApp
+- clearState
+
+- assertVisible: "การหารบิลกลุ่ม"
+
+- tapOn:
+    id: "input_Value"
+- inputText: "1000"
+- hideKeyboard
+
+- tapOn:
+    id: "add_participant__button"
+
+- tapOn:
+    id: "add_participant_name"
+- inputText: "John"
+- tapOn:
+    id: "confirm_add_button"
+
+- assertVisible: "John"
+- assertVisible: "50%"
+- assertVisible: "500.00 ฿"
+
+- tapOn:
+    id: "user_row_John__button"
+
+- assertVisible: "ยอดจ่าย: 500.00 บาท"
+- assertVisible: "แชร์ให้เพื่อน"
+
+- tapOn:
+    id: "close_qr_button"
