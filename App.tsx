@@ -61,6 +61,7 @@ export default function App() {
         {/* PAGE 1 */}
         <TouchableOpacity
           style={styles.menuButton}
+          testID = 'IncomeExpense'
           onPress={() => setPage('page1')}
         >
           <Text style={styles.menuItem}>I</Text>
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
 
   bottomMenu: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 50,
     left: 0,
     right: 0,
 

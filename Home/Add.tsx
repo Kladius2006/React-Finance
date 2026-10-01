@@ -54,14 +54,14 @@ export default function AddScreen({ onSave, onBack }: AddScreenProps) {
             style={[styles.typeBtn, type === 'income' && styles.incomeActiveBtn]}
             onPress={() => setType('income')}
           >
-            <Text style={[styles.typeBtnText, type === 'income' && styles.activeText]}>รายรับ</Text>
+            <Text style={[styles.typeBtnText, type === 'income' && styles.activeText]} testID = 'Income'>รายรับ</Text>
           </Pressable>
 
           <Pressable
             style={[styles.typeBtn, type === 'expense' && styles.expenseActiveBtn]}
             onPress={() => setType('expense')}
           >
-            <Text style={[styles.typeBtnText, type === 'expense' && styles.activeText]}>รายจ่าย</Text>
+            <Text style={[styles.typeBtnText, type === 'expense' && styles.activeText]} testID = 'Expexse'>รายจ่าย</Text>
           </Pressable>
         </View>
 
@@ -76,6 +76,7 @@ export default function AddScreen({ onSave, onBack }: AddScreenProps) {
         <Text style={styles.label}>จำนวนเงิน (บาท)</Text>
         <TextInput
           style={styles.input}
+          testID = 'Amount'
           value={amount}
           onChangeText={setAmount}
           placeholder="0.00"
@@ -85,16 +86,17 @@ export default function AddScreen({ onSave, onBack }: AddScreenProps) {
         <Text style={styles.label}>รายละเอียด / หมายเหตุ</Text>
         <TextInput
           style={styles.input}
+          testID = 'Description'
           value={note}
           onChangeText={setNote}
           placeholder="เช่น ค่าข้าว, เงินเดือน"
         />
 
-        <Pressable style={styles.saveButton} onPress={handleSave}>
+        <Pressable style={styles.saveButton} testID = 'Save' onPress={handleSave}>
           <Text style={styles.saveButtonText}>บันทึกรายการ</Text>
         </Pressable>
 
-        <Pressable style={styles.backButton} onPress={onBack}>
+        <Pressable style={styles.backButton} testID = 'Back' onPress={onBack}>
           <Text style={styles.backButtonText}>ย้อนกลับ</Text>
         </Pressable>
       </View>
