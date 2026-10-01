@@ -11,7 +11,7 @@ import { useState } from 'react';
 import Home from './Home/App';
 import Add from './Home/Add';
 import Page2 from './Page2';
-import Page3 from './Page3';
+import GroupBillSplitUI from './Qr_code/QR_code';
 
 export default function App() {
 
@@ -41,7 +41,7 @@ export default function App() {
           />
         )}
         {page === 'page2' && <Page2 />}
-        {page === 'page3' && <Page3 />}
+        {page === 'page3' && <GroupBillSplitUI />}
 
         <StatusBar style="auto" />
 
