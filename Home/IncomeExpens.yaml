@@ -1,0 +1,30 @@
+appId: com.anonymous.ReactFinance
+---
+- launchApp
+- tapOn:
+    id: "IncomeExpense"
+- tapOn:
+    id: "Amount"
+- inputText: "100"
+- tapOn:
+    id: "Description"
+- inputText: "ค่าข้าว"    
+- hideKeyboard
+- tapOn:
+    id: "Save" 
+- tapOn: 
+    id: "IncomeExpense"
+- tapOn: "รายรับ"
+- tapOn:
+    id: "Amount"
+- inputText: "500"
+- tapOn:
+    id: "Description"
+- inputText: "ไม่บอก"    
+- hideKeyboard
+- tapOn:
+    id: "Save"
+- tapOn:
+    id: "IncomeExpense"
+- tapOn:
+    id: "Back"
