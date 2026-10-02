@@ -11,6 +11,7 @@ import { useState } from 'react';
 import Home from './Home/App';
 import Add from './Home/Add';
 import Page2 from './Page2';
+import Page4 from './Page4';
 import GroupBillSplitUI from './Qr_code/QR_code';
 
 export default function App() {
@@ -42,6 +43,7 @@ export default function App() {
         )}
         {page === 'page2' && <Page2 />}
         {page === 'page3' && <GroupBillSplitUI />}
+        {page === 'page4' && <Page4 />}
 
         <StatusBar style="auto" />
 
@@ -64,7 +66,7 @@ export default function App() {
           testID = 'IncomeExpense'
           onPress={() => setPage('page1')}
         >
-          <Text style={styles.menuItem}>I</Text>
+          <Text style={styles.menuItem}>Income/Expense</Text>
         </TouchableOpacity>
 
 
@@ -73,7 +75,7 @@ export default function App() {
           style={styles.menuButton}
           onPress={() => setPage('page2')}
         >
-          <Text style={styles.menuItem}>B</Text>
+          <Text style={styles.menuItem}>Balance</Text>
         </TouchableOpacity>
 
 
@@ -83,7 +85,15 @@ export default function App() {
           testID = 'QRcode'
           onPress={() => setPage('page3')}
         >
-          <Text style={styles.menuItem}>S</Text>
+          <Text style={styles.menuItem}>Share</Text>
+        </TouchableOpacity>
+
+        {/* PAGE4 */}
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setPage('page4')}
+        >
+          <Text style={styles.menuItem}>Settings</Text>
         </TouchableOpacity>
 
       </View>
