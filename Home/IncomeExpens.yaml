@@ -3,15 +3,18 @@ appId: com.anonymous.ReactFinance
 - launchApp
 - tapOn:
     id: "IncomeExpense"
+- assertVisible: "หน้าเพิ่มรายการใหม่"
 - tapOn:
     id: "Amount"
 - inputText: "100"
 - tapOn:
     id: "Description"
 - inputText: "ค่าข้าว"    
-- hideKeyboard
+- assertVisible: "100"
+- assertVisible: "ค่าข้าว"
 - tapOn:
     id: "Save" 
+- assertVisible: "Money Expo"
 - tapOn: 
     id: "IncomeExpense"
 - tapOn:
@@ -21,11 +24,14 @@ appId: com.anonymous.ReactFinance
 - inputText: "500"
 - tapOn:
     id: "Description"
-- inputText: "ไม่บอก"    
-- hideKeyboard
+- inputText: "ได้เงิน"    
+- assertVisible: "500"
+- assertVisible: "ได้เงิน"
 - tapOn:
     id: "Save"
+- assertVisible: "Money Expo"
 - tapOn:
     id: "IncomeExpense"
 - tapOn:
     id: "Back"
+- assertVisible: "Money Expo"
