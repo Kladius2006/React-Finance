@@ -30,7 +30,7 @@ export default function Home({ transactions = [] }: HomeProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>TIT</Text>
+      <Text style={styles.title}>Money Expo</Text>
 
       <View style={styles.content}>
         {/* การ์ดแสดงยอดเงินรวม */}
