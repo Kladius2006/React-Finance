@@ -17,7 +17,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.ReactFinance"
+      "package": "com.it_twins.Piggy_gold"
     },
     "web": {
       "favicon": "./assets/favicon.png"
