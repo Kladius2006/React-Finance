@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Pressable, TextInput, Alert } from 'react-native';
+import { translations } from '../config/language';
 
 export type Transaction = {
   id: string;
@@ -15,6 +16,10 @@ type AddScreenProps = {
 };
 
 export default function AddScreen({ onSave, onBack }: AddScreenProps) {
+  // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
+  const [lang, setLang] = useState<'th' | 'en'>('th');
+  const t = translations[lang];
+
   const [type, setType] = useState<'income' | 'expense'>('expense');
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [amount, setAmount] = useState<string>('');
@@ -22,7 +27,7 @@ export default function AddScreen({ onSave, onBack }: AddScreenProps) {
 
   const handleSave = () => {
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
-      Alert.alert('ข้อผิดพลาด', 'กรุณากรอกจำนวนเงินให้ถูกต้อง');
+      Alert.alert(t.error, t.invalid_amount);
       return;
     }
 
@@ -31,12 +36,11 @@ export default function AddScreen({ onSave, onBack }: AddScreenProps) {
       type,
       date: date || new Date().toISOString().split('T')[0],
       amount: parseFloat(amount),
-      note: note.trim() || (type === 'income' ? 'รายรับ' : 'รายจ่าย'),
+      note: note.trim() || (type === 'income' ? t.income.replace(':', '').trim() : t.expenses),
     };
 
     onSave(newTransaction);
     
-    // เคลียร์ฟอร์ม
     setAmount('');
     setNote('');
     setType('expense');
@@ -45,27 +49,31 @@ export default function AddScreen({ onSave, onBack }: AddScreenProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>หน้าเพิ่มรายการใหม่</Text>
+      <Text style={styles.title}>{t.add_new_transaction}</Text>
       
       <View style={styles.formContent}>
-        <Text style={styles.label}>ประเภทรายการ</Text>
+        <Text style={styles.label}>{t.category}</Text>
         <View style={styles.typeContainer}>
           <Pressable
             style={[styles.typeBtn, type === 'income' && styles.incomeActiveBtn]}
             onPress={() => setType('income')}
           >
-            <Text style={[styles.typeBtnText, type === 'income' && styles.activeText]} testID = 'Income'>รายรับ</Text>
+            <Text style={[styles.typeBtnText, type === 'income' && styles.activeText]} testID='Income'>
+              {t.income.replace(':', '').trim()}
+            </Text>
           </Pressable>
 
           <Pressable
             style={[styles.typeBtn, type === 'expense' && styles.expenseActiveBtn]}
             onPress={() => setType('expense')}
           >
-            <Text style={[styles.typeBtnText, type === 'expense' && styles.activeText]} testID = 'Expexse'>รายจ่าย</Text>
+            <Text style={[styles.typeBtnText, type === 'expense' && styles.activeText]} testID='Expexse'>
+              {t.expenses}
+            </Text>
           </Pressable>
         </View>
 
-        <Text style={styles.label}>วันที่ (ปี-เดือน-วัน)</Text>
+        <Text style={styles.label}>{t.date}</Text>
         <TextInput
           style={styles.input}
           value={date}
@@ -73,31 +81,31 @@ export default function AddScreen({ onSave, onBack }: AddScreenProps) {
           placeholder="YYYY-MM-DD"
         />
 
-        <Text style={styles.label}>จำนวนเงิน (บาท)</Text>
+        <Text style={styles.label}>{t.value}</Text>
         <TextInput
           style={styles.input}
-          testID = 'Amount'
+          testID='Amount'
           value={amount}
           onChangeText={setAmount}
           placeholder="0.00"
           keyboardType="numeric"
         />
 
-        <Text style={styles.label}>รายละเอียด / หมายเหตุ</Text>
+        <Text style={styles.label}>{t.details}</Text>
         <TextInput
           style={styles.input}
-          testID = 'Description'
+          testID='Description'
           value={note}
           onChangeText={setNote}
-          placeholder="เช่น ค่าข้าว, เงินเดือน"
+          placeholder={lang === 'th' ? "เช่น ค่าข้าว, เงินเดือน" : "e.g., Food, Salary"}
         />
 
-        <Pressable style={styles.saveButton} testID = 'Save' onPress={handleSave}>
-          <Text style={styles.saveButtonText}>บันทึกรายการ</Text>
+        <Pressable style={styles.saveButton} testID='Save' onPress={handleSave}>
+          <Text style={styles.saveButtonText}>{t.add}</Text>
         </Pressable>
 
-        <Pressable style={styles.backButton} testID = 'Back' onPress={onBack}>
-          <Text style={styles.backButtonText}>ย้อนกลับ</Text>
+        <Pressable style={styles.backButton} testID='Back' onPress={onBack}>
+          <Text style={styles.backButtonText}>{t.cancel}</Text>
         </Pressable>
       </View>
     </View>

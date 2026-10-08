@@ -16,6 +16,7 @@ import DraggableFlatList, {
   ScaleDecorator,
 } from 'react-native-draggable-flatlist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { translations } from '../config/language';
 
 LogBox.ignoreLogs([
   'InteractionManager has been deprecated',
@@ -31,6 +32,10 @@ interface Category {
 }
 
 export default function Balance() {
+  // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
+  const [lang, setLang] = useState<'th' | 'en'>('th');
+  const t = translations[lang];
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -57,7 +62,7 @@ export default function Balance() {
         setCategories([]);
       }
     } catch (e) {
-      Alert.alert('เกิดข้อผิดพลาด', 'ไม่สามารถโหลดข้อมูลจากหน่วยความจำได้');
+      Alert.alert(t.error, t.load_error);
     } finally {
       setIsLoading(false);
     }
@@ -73,12 +78,12 @@ export default function Balance() {
 
   const addCategory = () => {
     if (!newName.trim() || !newBudget.trim()) {
-      Alert.alert('กรุณากรอกข้อมูล', 'ระบุชื่อหมวดหมู่และจำนวนเงินให้ครบถ้วน');
+      Alert.alert(t.please_fill, t.fill_category_budget);
       return;
     }
     const allocatedAmount = parseFloat(newBudget);
     if (isNaN(allocatedAmount) || allocatedAmount <= 0) {
-      Alert.alert('ข้อมูลไม่ถูกต้อง', 'กรุณาระบุจำนวนเงินเป็นตัวเลขที่มากกว่า 0');
+      Alert.alert(t.invalid_data, t.invalid_amount);
       return;
     }
 
@@ -95,10 +100,10 @@ export default function Balance() {
   };
 
   const deleteCategory = (id: string) => {
-    Alert.alert('ยืนยันการลบ', 'คุณต้องการลบหมวดหมู่นี้หรือไม่?', [
-      { text: 'ยกเลิก', style: 'cancel' },
+    Alert.alert(t.confirm_delete, t.confirm_delete_message, [
+      { text: t.cancel, style: 'cancel' },
       {
-        text: 'ลบ',
+        text: t.delete,
         style: 'destructive',
         onPress: () => {
           setCategories((prev) => prev.filter((cat) => cat.id !== id));
@@ -116,7 +121,7 @@ export default function Balance() {
     const amount = parseFloat(amountText || '');
 
     if (isNaN(amount) || amount <= 0) {
-      Alert.alert('ข้อมูลไม่ถูกต้อง', 'กรุณากรอกจำนวนเงินจ่ายที่ถูกต้อง');
+      Alert.alert(t.invalid_data, t.invalid_spend);
       return;
     }
 
@@ -161,10 +166,7 @@ export default function Balance() {
         }
 
         if (currentDeficit > 0) {
-          Alert.alert(
-            'เตือนสมดุลเงิน',
-            'เงินในหมวดหมู่อื่นๆ ไม่พอชดเชยส่วนเกินนี้!'
-          );
+          Alert.alert(t.balance_warning, t.balance_warning_message);
         }
       }
 
@@ -196,7 +198,7 @@ export default function Balance() {
               <Text style={styles.categoryName}>{item.name}</Text>
             </View>
             <View style={styles.rightHeaderContainer}>
-              <Text style={styles.dragHint}>⋮⋮ กดค้างเพื่อลาก</Text>
+              <Text style={styles.dragHint}>{t.drag_hint}</Text>
 
               <TouchableOpacity
                 onPress={() => deleteCategory(item.id)}
@@ -210,20 +212,20 @@ export default function Balance() {
 
           <View style={styles.cardDetail}>
             <Text style={styles.detailText}>
-              จัดสรร: <Text style={styles.bold}>{item.allocated.toLocaleString()} B</Text>
+              {t.allocated} <Text style={styles.bold}>{item.allocated.toLocaleString()} B</Text>
             </Text>
             <Text style={styles.detailText}>
-              ใช้ไป: <Text style={styles.bold}>{item.spent.toLocaleString()} B</Text>
+              {t.spent} <Text style={styles.bold}>{item.spent.toLocaleString()} B</Text>
             </Text>
             <Text style={[styles.detailText, { color: remaining < 0 ? '#e74c3c' : '#2ecc71' }]}>
-              เหลือ: <Text style={styles.bold}>{remaining.toLocaleString()} B</Text>
+              {t.remaining} <Text style={styles.bold}>{remaining.toLocaleString()} B</Text>
             </Text>
           </View>
 
           <View style={styles.spendInputRow}>
             <TextInput
               style={styles.spendInput}
-              placeholder="จำนวนเงินที่จ่าย (บาท)"
+              placeholder={t.spend_placeholder}
               keyboardType="numeric"
               value={spendInputs[item.id] || ''}
               onChangeText={(text) => handleSpendInputChange(item.id, text)}
@@ -232,7 +234,7 @@ export default function Balance() {
               style={styles.spendSubmitButton}
               onPress={() => handleSpend(item.id)}
             >
-              <Text style={styles.spendSubmitText}>บันทึกจ่าย</Text>
+              <Text style={styles.spendSubmitText}>{t.save_spend}</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -244,7 +246,7 @@ export default function Balance() {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#3498db" />
-        <Text style={{ marginTop: 10, color: '#666' }}>กำลังโหลดข้อมูล...</Text>
+        <Text style={{ marginTop: 10, color: '#666' }}>{t.loading}</Text>
       </View>
     );
   }
@@ -255,42 +257,42 @@ export default function Balance() {
         <StatusBar barStyle="dark-content" />
 
         <View style={styles.summaryContainer}>
-          <Text style={styles.summaryTitle}>ยอดเงินรวมในระบบ</Text>
+          <Text style={styles.summaryTitle}>{t.total_balance}</Text>
           <View style={styles.summaryRow}>
-            <Text style={styles.summaryText}>จัดสรรรวม: {totalAllocated.toLocaleString()} B</Text>
-            <Text style={styles.summaryText}>ใช้ไปรวม: {totalSpent.toLocaleString()} B</Text>
+            <Text style={styles.summaryText}>{t.total_allocated} {totalAllocated.toLocaleString()} B</Text>
+            <Text style={styles.summaryText}>{t.total_spent} {totalSpent.toLocaleString()} B</Text>
           </View>
         </View>
 
         <View style={styles.addForm}>
           <TextInput
-            testID = "category_name"
+            testID="category_name"
             style={[styles.input, { flex: 2 }]}
-            placeholder="ชื่อหมวด (เช่น ค่าห้อง)"
+            placeholder={t.category_name_placeholder}
             value={newName}
             onChangeText={setNewName}
           />
           <TextInput
-            testID = "budget"
+            testID="budget"
             style={[styles.input, { flex: 1.5 }]}
-            placeholder="งบ (บาท)"
+            placeholder={t.budget_placeholder}
             keyboardType="numeric"
             value={newBudget}
             onChangeText={setNewBudget}
           />
-          <TouchableOpacity testID = "add_button" style={styles.addButton} onPress={addCategory}>
+          <TouchableOpacity testID="add_button" style={styles.addButton} onPress={addCategory}>
             <Text style={styles.addButtonText}>+</Text>
           </TouchableOpacity>
         </View>
 
         <Text style={styles.sectionHeader}>
-          ลำดับความสำคัญ (บนสุด = สำคัญที่สุด)
+          {t.priority}
         </Text>
 
         {categories.length === 0 ? (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>ยังไม่มีหมวดหมู่เงินจัดสรร</Text>
-            <Text style={styles.emptySubText}>กรอกชื่อหมวดหมู่และงบประมาณด้านบนเพื่อเพิ่มรายการ</Text>
+            <Text style={styles.emptyText}>{t.no_categories}</Text>
+            <Text style={styles.emptySubText}>{t.add_category_hint}</Text>
           </View>
         ) : (
           <DraggableFlatList
