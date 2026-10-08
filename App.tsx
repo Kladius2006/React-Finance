@@ -11,11 +11,11 @@ import { useState } from 'react';
 import Home from './Home/App';
 import Add from './Home/Add';
 import Balance from './Balance/balance';
-import Page4 from './Page4';
 import GroupBillSplitUI from './Qr_code/QR_code';
+import Setting from './config/setting';
 
 export default function App() {
-
+  
   const [page, setPage] = useState('home');
 
   // 1. เพิ่ม State สำหรับเก็บรายการธุรกรรมทั้งหมด
@@ -43,7 +43,7 @@ export default function App() {
         )}
         {page === 'balance' && <Balance />}
         {page === 'qr_code' && <GroupBillSplitUI />}
-        {page === 'page4' && <Page4 />}
+        {page === 'setting' && <Setting />}
 
         <StatusBar style="auto" />
 
@@ -92,7 +92,7 @@ export default function App() {
         {/* PAGE4 */}
         <TouchableOpacity
           style={styles.menuButton}
-          onPress={() => setPage('page4')}
+          onPress={() => setPage('setting')}
         >
           <Text style={styles.menuItem}>Settings</Text>
         </TouchableOpacity>
