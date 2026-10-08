@@ -10,7 +10,7 @@ import { useState } from 'react';
 
 import Home from './Home/App';
 import Add from './Home/Add';
-import Page2 from './Page2';
+import Balance from './Balance/balance';
 import Page4 from './Page4';
 import GroupBillSplitUI from './Qr_code/QR_code';
 
@@ -35,14 +35,14 @@ export default function App() {
         {/* ส่ง transactions ไปให้ Home แสดงผล */}
         {page === 'home' && <Home transactions={transactions} />}
 
-        {page === 'page1' && (
+        {page === 'add' && (
           <Add 
             onSave={handleSaveTransaction} 
             onBack={() => setPage('home')} 
           />
         )}
-        {page === 'page2' && <Page2 />}
-        {page === 'page3' && <GroupBillSplitUI />}
+        {page === 'balance' && <Balance />}
+        {page === 'qr_code' && <GroupBillSplitUI />}
         {page === 'page4' && <Page4 />}
 
         <StatusBar style="auto" />
@@ -64,7 +64,7 @@ export default function App() {
         <TouchableOpacity
           style={styles.menuButton}
           testID = 'IncomeExpense'
-          onPress={() => setPage('page1')}
+          onPress={() => setPage('add')}
         >
           <Text style={styles.menuItem}>Income/Expense</Text>
         </TouchableOpacity>
@@ -73,7 +73,8 @@ export default function App() {
         {/* PAGE 2 */}
         <TouchableOpacity
           style={styles.menuButton}
-          onPress={() => setPage('page2')}
+          testID = 'Balance'
+          onPress={() => setPage('balance')}
         >
           <Text style={styles.menuItem}>Balance</Text>
         </TouchableOpacity>
@@ -83,7 +84,7 @@ export default function App() {
         <TouchableOpacity
           style={styles.menuButton}
           testID = 'QRcode'
-          onPress={() => setPage('page3')}
+          onPress={() => setPage('qr_code')}
         >
           <Text style={styles.menuItem}>Share</Text>
         </TouchableOpacity>

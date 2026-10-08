@@ -1,0 +1,35 @@
+appId: com.it_twins.Piggy_gold
+---
+- launchApp
+- tapOn:
+    id: "Balance"
+
+- tapOn:
+    id: "category_name"
+
+- inputText: "ค่าห้อง"
+
+- tapOn:
+    id: "budget"
+
+- inputText: "5000"
+
+- tapOn:
+    id: "add_button"
+
+- tapOn:
+    id: "category_name"
+
+- inputText: "ค่าอาหาร"
+
+- tapOn:
+    id: "budget"
+
+- inputText: "3000"
+
+- tapOn:
+    id: "add_button"
+
+- assertVisible: "ค่าห้อง"
+
+- assertVisible: "ค่าอาหาร"
