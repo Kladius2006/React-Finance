@@ -8,6 +8,9 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 
+// นำเข้า LanguageProvider ที่เราสร้างไว้
+import { LanguageProvider } from './config/LanguageContext'; 
+
 import Home from './Home/App';
 import Add from './Home/Add';
 import Balance from './Balance/balance';
@@ -28,78 +31,80 @@ export default function App() {
   };
 
   return (
-    <View style={styles.container}>
+    <LanguageProvider>
+      <View style={styles.container}>
 
-      {/* PAGE CONTENT */}
+        {/* PAGE CONTENT */}
 
-        {/* ส่ง transactions ไปให้ Home แสดงผล */}
-        {page === 'home' && <Home transactions={transactions} />}
+          {/* ส่ง transactions ไปให้ Home แสดงผล */}
+          {page === 'home' && <Home transactions={transactions} />}
 
-        {page === 'add' && (
-          <Add 
-            onSave={handleSaveTransaction} 
-            onBack={() => setPage('home')} 
-          />
-        )}
-        {page === 'balance' && <Balance />}
-        {page === 'qr_code' && <GroupBillSplitUI />}
-        {page === 'setting' && <Setting />}
+          {page === 'add' && (
+            <Add 
+              onSave={handleSaveTransaction} 
+              onBack={() => setPage('home')} 
+            />
+          )}
+          {page === 'balance' && <Balance />}
+          {page === 'qr_code' && <GroupBillSplitUI />}
+          {page === 'setting' && <Setting />}
 
-        <StatusBar style="auto" />
-
-
-      {/* BOTTOM MENU */}
-      <View style={styles.bottomMenu}>
-
-        {/* HOME */}
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setPage('home')}
-        >
-          <Text style={styles.menuItem}>Home</Text>
-        </TouchableOpacity>
+          <StatusBar style="auto" />
 
 
-        {/* PAGE 1 */}
-        <TouchableOpacity
-          style={styles.menuButton}
-          testID = 'IncomeExpense'
-          onPress={() => setPage('add')}
-        >
-          <Text style={styles.menuItem}>Income/Expense</Text>
-        </TouchableOpacity>
+        {/* BOTTOM MENU */}
+        <View style={styles.bottomMenu}>
+
+          {/* HOME */}
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={() => setPage('home')}
+          >
+            <Text style={styles.menuItem}>Home</Text>
+          </TouchableOpacity>
 
 
-        {/* PAGE 2 */}
-        <TouchableOpacity
-          style={styles.menuButton}
-          testID = 'Balance'
-          onPress={() => setPage('balance')}
-        >
-          <Text style={styles.menuItem}>Balance</Text>
-        </TouchableOpacity>
+          {/* PAGE 1 */}
+          <TouchableOpacity
+            style={styles.menuButton}
+            testID = 'IncomeExpense'
+            onPress={() => setPage('add')}
+          >
+            <Text style={styles.menuItem}>Income/Expense</Text>
+          </TouchableOpacity>
 
 
-        {/* PAGE3 */}
-        <TouchableOpacity
-          style={styles.menuButton}
-          testID = 'QRcode'
-          onPress={() => setPage('qr_code')}
-        >
-          <Text style={styles.menuItem}>Share</Text>
-        </TouchableOpacity>
+          {/* PAGE 2 */}
+          <TouchableOpacity
+            style={styles.menuButton}
+            testID = 'Balance'
+            onPress={() => setPage('balance')}
+          >
+            <Text style={styles.menuItem}>Balance</Text>
+          </TouchableOpacity>
 
-        {/* PAGE4 */}
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setPage('setting')}
-        >
-          <Text style={styles.menuItem}>Settings</Text>
-        </TouchableOpacity>
+
+          {/* PAGE3 */}
+          <TouchableOpacity
+            style={styles.menuButton}
+            testID = 'QRcode'
+            onPress={() => setPage('qr_code')}
+          >
+            <Text style={styles.menuItem}>Share</Text>
+          </TouchableOpacity>
+
+          {/* PAGE4 */}
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={() => setPage('setting')}
+          >
+            <Text style={styles.menuItem}>Settings</Text>
+          </TouchableOpacity>
+
+        </View>
 
       </View>
-
-    </View>
+    </LanguageProvider>
   );
 }
 

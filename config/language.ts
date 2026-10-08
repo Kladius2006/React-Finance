@@ -87,8 +87,8 @@ export const translations = {
     details: 'details,note',
 
     // หน้า Home
-    balance: 'Balance',
-    income: 'Balance:',
+    balance: 'income',
+    income: 'income:',
     expenses: 'Expenses',
     non_data: 'No data recorded.',
 
