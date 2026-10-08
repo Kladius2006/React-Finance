@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+// 1. นำเข้า useLanguage จากไฟล์ Context ที่เราสร้าง
+import { useLanguage } from '../config/LanguageContext'; 
 
 export default function Setting() {
-
-  const [language, setLanguage] = useState('th');
+  // 2. เรียกใช้งานตัวแปรส่วนกลาง (แทนที่ useState ตัวเดิม)
+  const { lang, setLang } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <View style={styles.container}>
-
       <View style={styles.header}>
         <Text style={styles.smallTitle}>PERSONAL</Text>
-
         <View style={styles.titleRow}>
           <Text style={styles.gear}>⚙</Text>
           <Text style={styles.title}>Settings</Text>
@@ -25,104 +20,62 @@ export default function Setting() {
 
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>LANGUAGE</Text>
-
-        <Text style={styles.sectionSub}>
-          Choose your preferred language
-        </Text>
+        <Text style={styles.sectionSub}>Choose your preferred language</Text>
       </View>
 
-      <TouchableOpacity
-        style={styles.languageCard}
-        onPress={() => setIsOpen(!isOpen)}
-      >
-
+      <TouchableOpacity style={styles.languageCard} onPress={() => setIsOpen(!isOpen)}>
         <View>
           <Text style={styles.languageName}>
-            {language === 'th' ? 'ภาษาไทย' : 'English'}
+            {lang === 'th' ? 'ภาษาไทย' : 'English'}
           </Text>
-
           <Text style={styles.languageSub}>
-            {language === 'th' ? 'Thai' : 'English'}
+            {lang === 'th' ? 'Thai' : 'English'}
           </Text>
         </View>
-
-        <Text style={styles.arrow}>
-          {isOpen ? '⌃' : '⌄'}
-        </Text>
-
+        <Text style={styles.arrow}>{isOpen ? '⌃' : '⌄'}</Text>
       </TouchableOpacity>
 
       {isOpen && (
         <View style={styles.dropdownList}>
-
           <TouchableOpacity
             style={styles.option}
             onPress={() => {
-              setLanguage('th');
+              setLang('th');
               setIsOpen(false);
             }}
           >
-
             <View>
-              <Text style={styles.optionText}>
-                ภาษาไทย
-              </Text>
-
-              <Text style={styles.optionSub}>
-                Thai
-              </Text>
+              <Text style={styles.optionText}>ภาษาไทย</Text>
+              <Text style={styles.optionSub}>Thai</Text>
             </View>
-
-            {language === 'th' && (
-              <Text style={styles.check}>✓</Text>
-            )}
-
+            {lang === 'th' && <Text style={styles.check}>✓</Text>}
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.option}
             onPress={() => {
-              setLanguage('en');
+              setLang('en');
               setIsOpen(false);
             }}
           >
-
             <View>
-              <Text style={styles.optionText}>
-                English
-              </Text>
-
-              <Text style={styles.optionSub}>
-                English
-              </Text>
+              <Text style={styles.optionText}>English</Text>
+              <Text style={styles.optionSub}>English</Text>
             </View>
-
-            {language === 'en' && (
-              <Text style={styles.check}>✓</Text>
-            )}
-
+            {lang === 'en' && <Text style={styles.check}>✓</Text>}
           </TouchableOpacity>
-
         </View>
       )}
 
       <View style={styles.infoCard}>
-
-        <Text style={styles.infoTitle}>
-          App Language
-        </Text>
-
+        <Text style={styles.infoTitle}>App Language</Text>
         <Text style={styles.infoText}>
-          This setting controls the language
-          used throughout the application.
+          This setting controls the language used throughout the application.
         </Text>
-
       </View>
-
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
 
