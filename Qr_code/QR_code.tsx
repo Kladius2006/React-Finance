@@ -16,6 +16,7 @@ import {translations} from '../config/language'
 import QRCode from 'react-native-qrcode-svg';
 import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
+import { useLanguage } from '../config/LanguageContext';
 
 // โครงสร้างข้อมูลผู้ร่วมหาร
 interface Participant {
@@ -28,7 +29,7 @@ export default function GroupBillSplitUI() {
   // สถานะเก็บยอดเงินรวม
   const [totalAmount, setTotalAmount] = useState<string>('');
   // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
-  const [lang, setLang] = useState<'th' | 'en'>('th');
+  const { lang } = useLanguage(); 
   const t = translations[lang];
 
   // สถานะรายชื่อผู้ร่วมหาร (เริ่มต้นที่ตัวเราเอง 1 คน)

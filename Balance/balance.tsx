@@ -17,6 +17,7 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { translations } from '../config/language';
+import { useLanguage } from '../config/LanguageContext';
 
 LogBox.ignoreLogs([
   'InteractionManager has been deprecated',
@@ -33,7 +34,7 @@ interface Category {
 
 export default function Balance() {
   // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
-  const [lang, setLang] = useState<'th' | 'en'>('th');
+  const { lang } = useLanguage(); 
   const t = translations[lang];
 
   const [categories, setCategories] = useState<Category[]>([]);

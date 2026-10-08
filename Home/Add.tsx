@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Pressable, TextInput, Alert } from 'react-native';
 import { translations } from '../config/language';
+import { useLanguage } from '../config/LanguageContext';
 
 export type Transaction = {
   id: string;
@@ -18,7 +19,7 @@ type AddScreenProps = {
 
 export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenProps) {
   // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
-  const [lang, setLang] = useState<'th' | 'en'>('th');
+  const { lang } = useLanguage(); 
   const t = translations[lang];
 
   const [type, setType] = useState<'income' | 'expense'>('expense');
