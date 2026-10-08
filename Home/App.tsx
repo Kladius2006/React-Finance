@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { translations } from '../config/language';
 
-// 1. กำหนด Type สำหรับรับ transactions จาก App.tsx
 type HomeProps = {
   transactions?: Array<{
     id: string;
@@ -12,20 +12,19 @@ type HomeProps = {
   }>;
 };
 
-// 2. รับ props transactions เข้ามา (กำหนดค่าเริ่มต้นเป็น array ว่าง [])
 export default function Home({ transactions = [] }: HomeProps) {
+  // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
+  const [lang, setLang] = useState<'th' | 'en'>('th');
+  const t = translations[lang];
 
-  // คำนวณรายรับทั้งหมด
   const totalIncome = transactions
     .filter((t) => t.type === 'income')
     .reduce((sum, t) => sum + t.amount, 0);
 
-  // คำนวณรายจ่ายทั้งหมด
   const totalExpense = transactions
     .filter((t) => t.type === 'expense')
     .reduce((sum, t) => sum + t.amount, 0);
 
-  // ยอดคงเหลือสุทธิ
   const balance = totalIncome - totalExpense;
 
   return (
@@ -33,30 +32,28 @@ export default function Home({ transactions = [] }: HomeProps) {
       <Text style={styles.title}>Money Expo</Text>
 
       <View style={styles.content}>
-        {/* การ์ดแสดงยอดเงินรวม */}
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryLabel}>คงเหลือสุทธิ</Text>
+          <Text style={styles.summaryLabel}>{t.balance}</Text>
           <Text style={[styles.summaryBalance, { color: balance >= 0 ? '#34C759' : '#FF3B30' }]}>
             ฿{balance.toLocaleString('th-TH', { minimumFractionDigits: 2 })}
           </Text>
           <View style={styles.summaryRow}>
             <Text style={{ color: '#34C759', fontWeight: '600' }}>
-              รายรับ: +฿{totalIncome.toLocaleString()}
+              {t.income} +฿{totalIncome.toLocaleString()}
             </Text>
             <Text style={{ color: '#FF3B30', fontWeight: '600' }}>
-              รายจ่าย: -฿{totalExpense.toLocaleString()}
+              {t.expenses}: -฿{totalExpense.toLocaleString()}
             </Text>
           </View>
         </View>
 
-        {/* ส่วนแสดงรายการบันทึก */}
         <View style={styles.listSection}>
           <FlatList
             data={transactions}
             keyExtractor={(item) => item.id}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
-              <Text style={styles.emptyText}>ยังไม่มีรายการบันทึก</Text>
+              <Text style={styles.emptyText}>{t.non_data}</Text>
             }
             renderItem={({ item }) => (
               <View style={styles.itemCard}>
@@ -90,7 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 60,
     paddingHorizontal: 20,
-    paddingBottom: 80, // เผื่อระยะด้านล่างไม่ให้เมนูบังรายการ
+    paddingBottom: 80, 
   },
   title: {
     fontSize: 22,

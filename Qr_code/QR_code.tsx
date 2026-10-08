@@ -1,4 +1,4 @@
-import React, { useState,useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Text,
   View,
@@ -17,39 +17,37 @@ import QRCode from 'react-native-qrcode-svg';
 import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 
-
 // โครงสร้างข้อมูลผู้ร่วมหาร
 interface Participant {
   id: string;
   name: string;
+  isMe?: boolean;
 }
 
 export default function GroupBillSplitUI() {
   // สถานะเก็บยอดเงินรวม
   const [totalAmount, setTotalAmount] = useState<string>('');
-  // การเปลี่ยนภาษา
+  // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
   const [lang, setLang] = useState<'th' | 'en'>('th');
   const t = translations[lang];
-  
+
   // สถานะรายชื่อผู้ร่วมหาร (เริ่มต้นที่ตัวเราเอง 1 คน)
   const [participants, setParticipants] = useState<Participant[]>([
-    { id: '1', name: 'ฉัน (Me)' }
+    { id: '1', name: 'ฉัน (Me)', isMe: true }
   ]);
 
-  // สถานะ Modal สำหรับเพิ่มคน
+  const displayName = (p: Participant | null) => (p ? (p.isMe ? t.me : p.name) : '');
+
   const [addModalVisible, setAddModalVisible] = useState(false);
   const [newParticipantName, setNewParticipantName] = useState('');
 
-  // สถานะ Modal สำหรับ QR Code
   const [qrModalVisible, setQrModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Participant | null>(null);
 
-  // ระบบคำนวณอัตโนมัติ
   const amountNumber = parseFloat(totalAmount) || 0;
   const splitAmount = participants.length > 0 ? (amountNumber / participants.length).toFixed(2) : '0.00';
   const percentage = participants.length > 0 ? (100 / participants.length).toFixed(0) : '0';
 
-  // ฟังก์ชันบันทึกชื่อเพื่อนใหม่
   const handleAddParticipant = () => {
     if (newParticipantName.trim() !== '') {
       const newUser = {
@@ -62,9 +60,7 @@ export default function GroupBillSplitUI() {
     }
   };
 
-  // ฟังก์ชันสร้าง PromptPay Payload สำหรับเบอร์โทรศัพท์
 const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
-  // จัดรูปแบบเบอร์โทร (แปลง 08x-xxx-xxxx เป็น 00668xxxxxxxx)
   let formattedPhone = mobileNumber.replace(/[^0-9]/g, '');
   if (formattedPhone.startsWith('0')) {
     formattedPhone = '0066' + formattedPhone.slice(1);
@@ -75,14 +71,13 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
     return id + len + value;
   };
 
-  // 00 = Version, 10 = Initiation Method (11 = Dynamic QR ใช้ครั้งเดียว)
   const aid = 'A000000677010111';
   const merchantAccount = formatField('29', formatField('00', aid) + formatField('01', formattedPhone));
-  const currency = '5303764'; // THB (764)
+  const currency = '5303764'; 
   const amtStr = amount.toFixed(2);
   const amountField = formatField('54', amtStr);
   const country = '5802TH';
-  const nameField = formatField('59', 'POMTPAY'); // หรือชื่อผู้รับ
+  const nameField = formatField('59', 'POMTPAY'); 
 
   let dataToCrc = formatField('00', '01') +
                   formatField('01', '12') +
@@ -93,7 +88,6 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
                   nameField +
                   '6304';
 
-  // คำนวณ CRC16-CCITT (poly 0x1021, init 0xFFFF) ตามมาตรฐาน EMVCo/PromptPay
   let crc = 0xffff;
   for (let i = 0; i < dataToCrc.length; i++) {
     crc ^= dataToCrc.charCodeAt(i) << 8;
@@ -104,12 +98,11 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
   return dataToCrc + crc.toString(16).toUpperCase().padStart(4, '0');
   };
 
-  // แชร์ QR Code เป็นรูปภาพ
   const qrCardRef = useRef<View>(null);
   const handleShareQR = async () => {
     try {
       if (!(await Sharing.isAvailableAsync())) {
-        Alert.alert('ไม่รองรับ', 'อุปกรณ์นี้ไม่รองรับการแชร์');
+        Alert.alert(t.share_unsupported, t.share_unsupported_message);
         return;
       }
       const uri = await captureRef(qrCardRef, {
@@ -119,15 +112,14 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
       });
       await Sharing.shareAsync(uri, {
         mimeType: 'image/png',
-        dialogTitle: 'แชร์ QR Code',
+        dialogTitle: t.share_dialog_title,
         UTI: 'public.png',
       });
     } catch (e) {
-      Alert.alert('แชร์ไม่สำเร็จ', 'ลองใหม่อีกครั้ง');
+      Alert.alert(t.share_failed, t.share_failed_message);
     }
   };
 
-  // เปิดดู QR Code ของคนนั้นๆ
   const openQRModal = (user: Participant) => {
     setSelectedUser(user);
     setQrModalVisible(true);
@@ -141,12 +133,12 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
         {/* 1. ส่วนหัว */}
         <View style={styles.header}>
           <FontAwesome5 name="qrcode" size={28} color="#fff" style={styles.headerIcon} />
-          <Text style={styles.headerText}>การหารบิลกลุ่ม</Text>
+          <Text style={styles.headerText}>{t.QR_title}</Text>
         </View>
 
         {/* 2. ส่วนกรอกจำนวนเงินรวม */}
         <View style={styles.inputSection}>
-          <Text style={styles.sectionTitle}>ยอดบิลรวมทั้งหมด (บาท)</Text>
+          <Text style={styles.sectionTitle}>{t.totalAmountLabel} ({t.currency})</Text>
           <View style={styles.inputContainer}>
             <TextInput
               testID="input_Value"
@@ -162,7 +154,7 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
 
         {/* 3. รายชื่อผู้ร่วมหาร */}
         <View style={styles.listHeader}>
-          <Text style={styles.subTitle}>ผู้ร่วมหาร ({participants.length} คน)</Text>
+          <Text style={styles.subTitle}>{t.participants} ({participants.length} {t.people})</Text>
           <TouchableOpacity testID="add_participant__button" style={styles.addCircleButton} onPress={() => setAddModalVisible(true)}>
             <FontAwesome5 name="plus" size={20} color="#fff" />
           </TouchableOpacity>
@@ -176,7 +168,7 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
             <TouchableOpacity testID={`user_row_${item.name}__button`} style={styles.userRow} onPress={() => openQRModal(item)}>
               <Ionicons name="person-circle" size={55} color="#3b5998" />
               <View style={styles.userBadge}>
-                <Text style={styles.userNameText}>{item.name}</Text>
+                <Text style={styles.userNameText}>{displayName(item)}</Text>
                 <View style={styles.badgeDetails}>
                   <Text style={styles.userDetailText}>{percentage}%</Text>
                   <Text style={styles.userAmountText}>{splitAmount} ฿</Text>
@@ -192,11 +184,11 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
       <Modal visible={addModalVisible} transparent={true} animationType="fade">
         <KeyboardAvoidingView style={styles.modalOverlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <View style={styles.addModalContent}>
-            <Text style={styles.modalTitle}>เพิ่มผู้ร่วมหาร</Text>
+            <Text style={styles.modalTitle}>{t.addParticipant}</Text>
             <TextInput
               testID="add_participant_name"
               style={styles.addModalInput}
-              placeholder="พิมพ์ชื่อเพื่อน..."
+              placeholder={t.placeholder}
               value={newParticipantName}
               onChangeText={setNewParticipantName}
               autoFocus={true}
@@ -204,10 +196,10 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
             />
             <View style={styles.addModalActions}>
               <TouchableOpacity testID="cancel_add_button" style={styles.cancelBtn} onPress={() => setAddModalVisible(false)}>
-                <Text style={styles.cancelBtnText}>ยกเลิก</Text>
+                <Text style={styles.cancelBtnText}>{t.cancel}</Text>
               </TouchableOpacity>
               <TouchableOpacity testID="confirm_add_button" style={styles.confirmBtn} onPress={handleAddParticipant}>
-                <Text style={styles.confirmBtnText}>เพิ่ม</Text>
+                <Text style={styles.confirmBtnText}>{t.add}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -225,7 +217,7 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
             <View ref={qrCardRef} collapsable={false} style={{ backgroundColor: 'white', alignItems: 'center', padding: 12 }}>
               <View style={styles.qrUserBadge}>
                 <Ionicons name="person-circle" size={36} color="black" style={{marginRight: 8}}/>
-                <Text style={styles.qrUserText}>{selectedUser?.name}  |  {percentage}%</Text>
+                <Text style={styles.qrUserText}>{displayName(selectedUser)}  |  {percentage}%</Text>
               </View>
 
               <View style={styles.qrBox}>
@@ -237,12 +229,12 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
                 />
               </View>
 
-              <Text style={styles.qrAmountText}>ยอดจ่าย: {splitAmount} บาท</Text>
+              <Text style={styles.qrAmountText}>{t.payAmount} {splitAmount} {t.currency}</Text>
             </View>
 
             <TouchableOpacity testID="share_qr_button" style={styles.shareButton} onPress={handleShareQR}>
               <MaterialCommunityIcons name="share-variant" size={20} color="white" style={{marginRight: 10}}/>
-              <Text style={styles.shareButtonText}>แชร์ให้เพื่อน</Text>
+              <Text style={styles.shareButtonText}>{t.share}</Text>
             </TouchableOpacity>
           </View>
         </View>
