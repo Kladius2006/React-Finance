@@ -27,6 +27,16 @@ export default function App() {
     setPage('home');
   };
 
+  const[textSize, setTextSize] = useState<string>("x1");
+
+  const textMultipliers: Record<string, number> = {
+  x1: 1,
+  x2: 2,
+  x4: 4,
+  };
+
+  const textMultiplier = textMultipliers[textSize];
+
   return (
     <View style={styles.container}>
 
@@ -36,14 +46,15 @@ export default function App() {
         {page === 'home' && <Home transactions={transactions} />}
 
         {page === 'add' && (
-          <Add 
+          <Add
+            textMultiplier={textMultiplier}
             onSave={handleSaveTransaction} 
             onBack={() => setPage('home')} 
           />
         )}
         {page === 'balance' && <Balance />}
         {page === 'qr_code' && <GroupBillSplitUI />}
-        {page === 'setting' && <Setting />}
+        {page === 'setting' && <Setting textSize={textSize} setTextSize={setTextSize} />}
 
         <StatusBar style="auto" />
 

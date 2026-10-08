@@ -13,9 +13,10 @@ export type Transaction = {
 type AddScreenProps = {
   onSave: (transaction: Transaction) => void;
   onBack: () => void;
+  textMultiplier: number;
 };
 
-export default function AddScreen({ onSave, onBack }: AddScreenProps) {
+export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenProps) {
   // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
   const [lang, setLang] = useState<'th' | 'en'>('th');
   const t = translations[lang];
@@ -46,6 +47,68 @@ export default function AddScreen({ onSave, onBack }: AddScreenProps) {
     setType('expense');
     setDate(new Date().toISOString().split('T')[0]);
   };
+
+  const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  title: {
+    fontSize: 22,
+    textAlign: 'center',
+    top: 50,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  formContent: {
+    flex: 1,
+    marginTop: 80,
+    paddingHorizontal: 20,
+  },
+  label: { fontSize: 14 * textMultiplier, fontWeight: 'bold', color: '#444', marginBottom: 6 },
+  typeContainer: { flexDirection: 'row', gap: 10, marginBottom: 16 },
+  typeBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: '#e0e0e0',
+    alignItems: 'center',
+  },
+  incomeActiveBtn: { backgroundColor: '#34C759' },
+  expenseActiveBtn: { backgroundColor: '#FF3B30' },
+  typeBtnText: { fontWeight: 'bold', color: '#555' },
+  activeText: { color: '#ffffff' },
+  input: {
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    marginBottom: 14,
+    fontSize: 16,
+  },
+  saveButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  saveButtonText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
+  backButton: {
+    marginTop: 10,
+    paddingVertical: 12,
+    backgroundColor: '#8e8e93',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  backButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  });
 
   return (
     <View style={styles.container}>
@@ -111,65 +174,3 @@ export default function AddScreen({ onSave, onBack }: AddScreenProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  title: {
-    fontSize: 22,
-    textAlign: 'center',
-    top: 50,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  formContent: {
-    flex: 1,
-    marginTop: 80,
-    paddingHorizontal: 20,
-  },
-  label: { fontSize: 14, fontWeight: 'bold', color: '#444', marginBottom: 6 },
-  typeContainer: { flexDirection: 'row', gap: 10, marginBottom: 16 },
-  typeBtn: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 8,
-    backgroundColor: '#e0e0e0',
-    alignItems: 'center',
-  },
-  incomeActiveBtn: { backgroundColor: '#34C759' },
-  expenseActiveBtn: { backgroundColor: '#FF3B30' },
-  typeBtnText: { fontWeight: 'bold', color: '#555' },
-  activeText: { color: '#ffffff' },
-  input: {
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    marginBottom: 14,
-    fontSize: 16,
-  },
-  saveButton: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  saveButtonText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
-  backButton: {
-    marginTop: 10,
-    paddingVertical: 12,
-    backgroundColor: '#8e8e93',
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  backButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});

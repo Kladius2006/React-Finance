@@ -4,16 +4,24 @@ import {
   Text,
   View,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 
-export default function Setting() {
+type TextSizeProps = {
+  textSize: string;
+  setTextSize: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export default function Setting({textSize, setTextSize}: TextSizeProps) {
 
   const [language, setLanguage] = useState('th');
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen1, setIsOpen1] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
 
   return (
     <View style={styles.container}>
 
+      {/* HEADER - stays fixed */}
       <View style={styles.header}>
         <Text style={styles.smallTitle}>PERSONAL</Text>
 
@@ -23,101 +31,226 @@ export default function Setting() {
         </View>
       </View>
 
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>LANGUAGE</Text>
 
-        <Text style={styles.sectionSub}>
-          Choose your preferred language
-        </Text>
-      </View>
-
-      <TouchableOpacity
-        style={styles.languageCard}
-        onPress={() => setIsOpen(!isOpen)}
+      {/* EVERYTHING BELOW HEADER CAN SCROLL */}
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
       >
 
-        <View>
-          <Text style={styles.languageName}>
-            {language === 'th' ? 'ภาษาไทย' : 'English'}
-          </Text>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>LANGUAGE</Text>
 
-          <Text style={styles.languageSub}>
-            {language === 'th' ? 'Thai' : 'English'}
+          <Text style={styles.sectionSub}>
+            Choose your preferred language
           </Text>
         </View>
 
-        <Text style={styles.arrow}>
-          {isOpen ? '⌃' : '⌄'}
-        </Text>
+        <TouchableOpacity
+          style={styles.languageCard}
+          onPress={() => setIsOpen1(!isOpen1)}
+        >
 
-      </TouchableOpacity>
+          <View>
+            <Text style={styles.languageName}>
+              {language === 'th' ? 'ภาษาไทย' : 'English'}
+            </Text>
 
-      {isOpen && (
-        <View style={styles.dropdownList}>
+            <Text style={styles.languageSub}>
+              {language === 'th' ? 'Thai' : 'English'}
+            </Text>
+          </View>
 
-          <TouchableOpacity
-            style={styles.option}
-            onPress={() => {
-              setLanguage('th');
-              setIsOpen(false);
-            }}
-          >
+          <Text style={styles.arrow}>
+            {isOpen1 ? '⌃' : '⌄'}
+          </Text>
 
-            <View>
-              <Text style={styles.optionText}>
-                ภาษาไทย
-              </Text>
+        </TouchableOpacity>
 
-              <Text style={styles.optionSub}>
-                Thai
-              </Text>
-            </View>
 
-            {language === 'th' && (
-              <Text style={styles.check}>✓</Text>
-            )}
+        {isOpen1 && (
+          <View style={styles.dropdownList}>
 
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => {
+                setLanguage('th');
+                setIsOpen1(false);
+              }}
+            >
 
-          <TouchableOpacity
-            style={styles.option}
-            onPress={() => {
-              setLanguage('en');
-              setIsOpen(false);
-            }}
-          >
+              <View>
+                <Text style={styles.optionText}>
+                  ภาษาไทย
+                </Text>
 
-            <View>
-              <Text style={styles.optionText}>
-                English
-              </Text>
+                <Text style={styles.optionSub}>
+                  Thai
+                </Text>
+              </View>
 
-              <Text style={styles.optionSub}>
-                English
-              </Text>
-            </View>
+              {language === 'th' && (
+                <Text style={styles.check}>✓</Text>
+              )}
 
-            {language === 'en' && (
-              <Text style={styles.check}>✓</Text>
-            )}
+            </TouchableOpacity>
 
-          </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => {
+                setLanguage('en');
+                setIsOpen1(false);
+              }}
+            >
+
+              <View>
+                <Text style={styles.optionText}>
+                  English
+                </Text>
+
+                <Text style={styles.optionSub}>
+                  English
+                </Text>
+              </View>
+
+              {language === 'en' && (
+                <Text style={styles.check}>✓</Text>
+              )}
+
+            </TouchableOpacity>
+
+          </View>
+        )}
+
+
+        <View style={styles.infoCard}>
+
+          <Text style={styles.infoTitle}>
+            App Language
+          </Text>
+
+          <Text style={styles.infoText}>
+            This setting controls the language
+            used throughout the application.
+          </Text>
 
         </View>
-      )}
 
-      <View style={styles.infoCard}>
 
-        <Text style={styles.infoTitle}>
-          App Language
-        </Text>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>TEXT SIZE</Text>
 
-        <Text style={styles.infoText}>
-          This setting controls the language
-          used throughout the application.
-        </Text>
+          <Text style={styles.sectionSub}>
+            Choose your preferred text size
+          </Text>
+        </View>
 
-      </View>
+
+        <TouchableOpacity
+          style={styles.languageCard}
+          onPress={() => setIsOpen2(!isOpen2)}
+        >
+
+          <View>
+            <Text style={styles.languageName}>
+              {textSize === 'x1' ? 'x1' : textSize === 'x2' ? 'x2' : 'x4'}
+            </Text>
+
+            <Text style={styles.languageSub}>
+              {textSize === 'x1' ? 'x1' : textSize === 'x2' ? 'x2' : 'x4'}
+            </Text>
+          </View>
+
+          <Text style={styles.arrow}>
+            {isOpen2 ? '⌃' : '⌄'}
+          </Text>
+
+        </TouchableOpacity>
+
+
+        {isOpen2 && (
+          <View style={styles.dropdownList}>
+
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => {
+                setTextSize('x1');
+                setIsOpen2(false);
+              }}
+            >
+
+              <View>
+                <Text style={styles.optionText}>
+                  x1
+                </Text>
+
+                <Text style={styles.optionSub}>
+                  x1
+                </Text>
+              </View>
+
+              {textSize === 'x1' && (
+                <Text style={styles.check}>✓</Text>
+              )}
+
+            </TouchableOpacity>
+
+
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => {
+                setTextSize('x2');
+                setIsOpen2(false);
+              }}
+            >
+
+              <View>
+                <Text style={styles.optionText}>
+                  x2
+                </Text>
+
+                <Text style={styles.optionSub}>
+                  x2
+                </Text>
+              </View>
+
+              {textSize === 'x2' && (
+                <Text style={styles.check}>✓</Text>
+              )}
+
+            </TouchableOpacity>
+
+
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => {
+                setTextSize('x4');
+                setIsOpen2(false);
+              }}
+            >
+
+              <View>
+                <Text style={styles.optionText}>
+                  x4
+                </Text>
+
+                <Text style={styles.optionSub}>
+                  x4
+                </Text>
+              </View>
+
+              {textSize === 'x4' && (
+                <Text style={styles.check}>✓</Text>
+              )}
+
+            </TouchableOpacity>
+
+          </View>
+        )}
+
+      </ScrollView>
 
     </View>
   );
@@ -269,6 +402,7 @@ const styles = StyleSheet.create({
   // Bottom information
   infoCard: {
     marginTop: 30,
+    marginBottom: 20,
     backgroundColor: '#172033',
     borderRadius: 20,
     padding: 22,
@@ -280,11 +414,16 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     marginBottom: 8,
   },
-
   infoText: {
     fontSize: 13,
     lineHeight: 20,
     color: '#aeb7c5',
+  },
+  scrollView: {
+  flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 140,
   },
 
 });
