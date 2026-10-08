@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef } from 'react';
 import {
   Text,
   View,
@@ -8,11 +8,14 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import {styles} from './QR_code_styles'
 import {translations} from '../config/language'
 import QRCode from 'react-native-qrcode-svg';
+import { captureRef } from 'react-native-view-shot';
+import * as Sharing from 'expo-sharing';
 
 
 // โครงสร้างข้อมูลผู้ร่วมหาร
@@ -90,8 +93,38 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
                   nameField +
                   '6304';
 
-  // คำนวณ CRC16 Checksum ง่ายๆ (หรือใช้ค่าจำลองโครงสร้างพื้นฐาน)
-  return dataToCrc + '1234'; 
+  // คำนวณ CRC16-CCITT (poly 0x1021, init 0xFFFF) ตามมาตรฐาน EMVCo/PromptPay
+  let crc = 0xffff;
+  for (let i = 0; i < dataToCrc.length; i++) {
+    crc ^= dataToCrc.charCodeAt(i) << 8;
+    for (let b = 0; b < 8; b++) {
+      crc = crc & 0x8000 ? ((crc << 1) ^ 0x1021) & 0xffff : (crc << 1) & 0xffff;
+    }
+  }
+  return dataToCrc + crc.toString(16).toUpperCase().padStart(4, '0');
+  };
+
+  // แชร์ QR Code เป็นรูปภาพ
+  const qrCardRef = useRef<View>(null);
+  const handleShareQR = async () => {
+    try {
+      if (!(await Sharing.isAvailableAsync())) {
+        Alert.alert('ไม่รองรับ', 'อุปกรณ์นี้ไม่รองรับการแชร์');
+        return;
+      }
+      const uri = await captureRef(qrCardRef, {
+        format: 'png',
+        quality: 1,
+        result: 'tmpfile',
+      });
+      await Sharing.shareAsync(uri, {
+        mimeType: 'image/png',
+        dialogTitle: 'แชร์ QR Code',
+        UTI: 'public.png',
+      });
+    } catch (e) {
+      Alert.alert('แชร์ไม่สำเร็จ', 'ลองใหม่อีกครั้ง');
+    }
   };
 
   // เปิดดู QR Code ของคนนั้นๆ
@@ -188,24 +221,26 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
             <TouchableOpacity testID="close_qr_button" style={styles.closeModalButton} onPress={() => setQrModalVisible(false)}>
               <FontAwesome5 name="times" size={24} color="#666" />
             </TouchableOpacity>
+            
+            <View ref={qrCardRef} collapsable={false} style={{ backgroundColor: 'white', alignItems: 'center', padding: 12 }}>
+              <View style={styles.qrUserBadge}>
+                <Ionicons name="person-circle" size={36} color="black" style={{marginRight: 8}}/>
+                <Text style={styles.qrUserText}>{selectedUser?.name}  |  {percentage}%</Text>
+              </View>
 
-            <View style={styles.qrUserBadge}>
-              <Ionicons name="person-circle" size={36} color="black" style={{marginRight: 8}}/>
-              <Text style={styles.qrUserText}>{selectedUser?.name}  |  {percentage}%</Text>
+              <View style={styles.qrBox}>
+                <QRCode
+                  value={generatePromptPayPayload(PROMPTPAY_PHONE, parseFloat(splitAmount) || 0)}
+                  size={180}
+                  color="#3b5998"
+                  backgroundColor="white"
+                />
+              </View>
+
+              <Text style={styles.qrAmountText}>ยอดจ่าย: {splitAmount} บาท</Text>
             </View>
 
-            <View style={styles.qrBox}>
-              <QRCode
-                value={generatePromptPayPayload(PROMPTPAY_PHONE, parseFloat(splitAmount) || 0)}
-                size={180}
-                color="#3b5998"
-                backgroundColor="white"
-              />
-            </View>
-
-            <Text style={styles.qrAmountText}>ยอดจ่าย: {splitAmount} บาท</Text>
-
-            <TouchableOpacity style={styles.shareButton}>
+            <TouchableOpacity testID="share_qr_button" style={styles.shareButton} onPress={handleShareQR}>
               <MaterialCommunityIcons name="share-variant" size={20} color="white" style={{marginRight: 10}}/>
               <Text style={styles.shareButtonText}>แชร์ให้เพื่อน</Text>
             </TouchableOpacity>
