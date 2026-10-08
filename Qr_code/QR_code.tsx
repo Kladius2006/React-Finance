@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import {styles} from './QR_code_styles'
+import {translations} from '../config/language'
+import QRCode from 'react-native-qrcode-svg';
+
 
 // โครงสร้างข้อมูลผู้ร่วมหาร
 interface Participant {
@@ -21,6 +24,9 @@ interface Participant {
 export default function GroupBillSplitUI() {
   // สถานะเก็บยอดเงินรวม
   const [totalAmount, setTotalAmount] = useState<string>('');
+  // การเปลี่ยนภาษา
+  const [lang, setLang] = useState<'th' | 'en'>('th');
+  const t = translations[lang];
   
   // สถานะรายชื่อผู้ร่วมหาร (เริ่มต้นที่ตัวเราเอง 1 คน)
   const [participants, setParticipants] = useState<Participant[]>([
@@ -53,11 +59,47 @@ export default function GroupBillSplitUI() {
     }
   };
 
+  // ฟังก์ชันสร้าง PromptPay Payload สำหรับเบอร์โทรศัพท์
+const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
+  // จัดรูปแบบเบอร์โทร (แปลง 08x-xxx-xxxx เป็น 00668xxxxxxxx)
+  let formattedPhone = mobileNumber.replace(/[^0-9]/g, '');
+  if (formattedPhone.startsWith('0')) {
+    formattedPhone = '0066' + formattedPhone.slice(1);
+  }
+
+  const formatField = (id: string, value: string) => {
+    const len = value.length.toString().padStart(2, '0');
+    return id + len + value;
+  };
+
+  // 00 = Version, 10 = Initiation Method (11 = Dynamic QR ใช้ครั้งเดียว)
+  const aid = 'A000000677010111';
+  const merchantAccount = formatField('29', formatField('00', aid) + formatField('01', formattedPhone));
+  const currency = '5303764'; // THB (764)
+  const amtStr = amount.toFixed(2);
+  const amountField = formatField('54', amtStr);
+  const country = '5802TH';
+  const nameField = formatField('59', 'POMTPAY'); // หรือชื่อผู้รับ
+
+  let dataToCrc = formatField('00', '01') +
+                  formatField('01', '12') +
+                  merchantAccount +
+                  currency +
+                  amountField +
+                  country +
+                  nameField +
+                  '6304';
+
+  // คำนวณ CRC16 Checksum ง่ายๆ (หรือใช้ค่าจำลองโครงสร้างพื้นฐาน)
+  return dataToCrc + '1234'; 
+  };
+
   // เปิดดู QR Code ของคนนั้นๆ
   const openQRModal = (user: Participant) => {
     setSelectedUser(user);
     setQrModalVisible(true);
   };
+  const PROMPTPAY_PHONE = '0989368545';
 
   return (
     <View style={[styles.container, { paddingTop: 30 }]}>
@@ -153,7 +195,12 @@ export default function GroupBillSplitUI() {
             </View>
 
             <View style={styles.qrBox}>
-              <FontAwesome5 name="qrcode" size={180} color="#3b5998" />
+              <QRCode
+                value={generatePromptPayPayload(PROMPTPAY_PHONE, parseFloat(splitAmount) || 0)}
+                size={180}
+                color="#3b5998"
+                backgroundColor="white"
+              />
             </View>
 
             <Text style={styles.qrAmountText}>ยอดจ่าย: {splitAmount} บาท</Text>
