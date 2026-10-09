@@ -31,5 +31,6 @@ appId: com.it_twins.Piggy_gold
     id: "add_button"
 
 - assertVisible: "ค่าห้อง"
-
+- assertVisible: "5000"
 - assertVisible: "ค่าอาหาร"
+- assertVisible: "3000"

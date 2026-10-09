@@ -28,11 +28,6 @@ export const translations = {
     payAmount: 'ยอดจ่าย:',
     share: 'แชร์ให้เพื่อน',
     me: 'กระผม',
-    share_dialog_title: 'แชร์ QR Code',
-    share_unsupported: 'ไม่รองรับ',
-    share_unsupported_message: 'อุปกรณ์นี้ไม่รองรับการแชร์',
-    share_failed: 'แชร์ไม่สำเร็จ',
-    share_failed_message: 'ลองใหม่อีกครั้ง',
 
     // หน้า Balance
     total_balance: 'ยอดเงินรวมในระบบ',
@@ -87,8 +82,8 @@ export const translations = {
     details: 'details,note',
 
     // หน้า Home
-    balance: 'income',
-    income: 'income:',
+    balance: 'Balance',
+    income: 'Ialance:',
     expenses: 'Expenses',
     non_data: 'No data recorded.',
 
@@ -105,11 +100,6 @@ export const translations = {
     payAmount: 'Pay:',
     share: 'Share',
     me: 'Me',
-    share_dialog_title: 'Share QR Code',
-    share_unsupported: 'Not supported',
-    share_unsupported_message: 'This device does not support sharing',
-    share_failed: 'Share failed',
-    share_failed_message: 'Please try again',
 
     // หน้า Balance
     total_balance: 'Total Balance',
