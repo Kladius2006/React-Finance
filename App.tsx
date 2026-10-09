@@ -1,15 +1,15 @@
+
 import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet,
   View,
-  ScrollView,
   TouchableOpacity,
   Text,
 } from 'react-native';
 import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 
-// นำเข้า LanguageProvider ที่เราสร้างไว้
-import { LanguageProvider } from './config/LanguageContext'; 
+import { LanguageProvider } from './config/LanguageContext';
 
 import Home from './Home/App';
 import Add from './Home/Add';
@@ -17,25 +17,60 @@ import Balance from './Balance/balance';
 import GroupBillSplitUI from './Qr_code/QR_code';
 import Setting from './config/setting';
 
-export default function App() {
-  
-  const [page, setPage] = useState('home');
+type Page = 'home' | 'add' | 'balance' | 'qr_code' | 'setting';
 
-  // 1. เพิ่ม State สำหรับเก็บรายการธุรกรรมทั้งหมด
+const NAV_ITEMS: {
+  page: Page;
+  label: string;
+  icon: React.ComponentProps<typeof Ionicons>['name'];
+  testID?: string;
+}[] = [
+  {
+    page: 'home',
+    label: 'Home',
+    icon: 'home-outline',
+  },
+  {
+    page: 'add',
+    label: 'Income/Expense',
+    icon: 'add-circle-outline',
+    testID: 'IncomeExpense',
+  },
+  {
+    page: 'balance',
+    label: 'Balance',
+    icon: 'wallet-outline',
+    testID: 'Balance',
+  },
+  {
+    page: 'qr_code',
+    label: 'Share',
+    icon: 'qr-code-outline',
+    testID: 'QRcode',
+  },
+  {
+    page: 'setting',
+    label: 'Settings',
+    icon: 'settings-outline',
+  },
+];
+
+export default function App() {
+  const [page, setPage] = useState<Page>('home');
+
   const [transactions, setTransactions] = useState<any[]>([]);
 
-  // 2. เพิ่มฟังก์ชันสำหรับรับบันทึกข้อมูลจากหน้า Add
   const handleSaveTransaction = (newTransaction: any) => {
-    setTransactions([newTransaction, ...transactions]);
+    setTransactions((previous) => [newTransaction, ...previous]);
     setPage('home');
   };
 
-  const[textSize, setTextSize] = useState<string>("x1");
+  const [textSize, setTextSize] = useState<string>('x1');
 
   const textMultipliers: Record<string, number> = {
-  x1: 1,
-  x2: 2,
-  x4: 4,
+    x1: 1,
+    x2: 2,
+    x4: 4,
   };
 
   const textMultiplier = textMultipliers[textSize];
@@ -43,130 +78,164 @@ export default function App() {
   return (
     <LanguageProvider>
       <View style={styles.container}>
+        <StatusBar style="dark" />
 
         {/* PAGE CONTENT */}
+        <View style={styles.pageContent}>
+          {page === 'home' && (
+            <Home transactions={transactions} />
+          )}
 
-          {/* ส่ง transactions ไปให้ Home แสดงผล */}
-          {page === 'home' && <Home transactions={transactions} />}
+          {page === 'add' && (
+            <Add
+              textMultiplier={textMultiplier}
+              onSave={handleSaveTransaction}
+              onBack={() => setPage('home')}
+            />
+          )}
 
-        {page === 'add' && (
-          <Add
-            textMultiplier={textMultiplier}
-            onSave={handleSaveTransaction} 
-            onBack={() => setPage('home')} 
-          />
-        )}
-        {page === 'balance' && <Balance />}
-        {page === 'qr_code' && <GroupBillSplitUI />}
-        {page === 'setting' && <Setting textSize={textSize} setTextSize={setTextSize} />}
+          {page === 'balance' && <Balance />}
 
-          <StatusBar style="auto" />
+          {page === 'qr_code' && <GroupBillSplitUI />}
 
-
-        {/* BOTTOM MENU */}
-        <View style={styles.bottomMenu}>
-
-          {/* HOME */}
-          <TouchableOpacity
-            style={styles.menuButton}
-            onPress={() => setPage('home')}
-          >
-            <Text style={styles.menuItem}>Home</Text>
-          </TouchableOpacity>
-
-
-          {/* PAGE 1 */}
-          <TouchableOpacity
-            style={styles.menuButton}
-            testID = 'IncomeExpense'
-            onPress={() => setPage('add')}
-          >
-            <Text style={styles.menuItem}>Income/Expense</Text>
-          </TouchableOpacity>
-
-
-          {/* PAGE 2 */}
-          <TouchableOpacity
-            style={styles.menuButton}
-            testID = 'Balance'
-            onPress={() => setPage('balance')}
-          >
-            <Text style={styles.menuItem}>Balance</Text>
-          </TouchableOpacity>
-
-
-          {/* PAGE3 */}
-          <TouchableOpacity
-            style={styles.menuButton}
-            testID = 'QRcode'
-            onPress={() => setPage('qr_code')}
-          >
-            <Text style={styles.menuItem}>Share</Text>
-          </TouchableOpacity>
-
-          {/* PAGE4 */}
-          <TouchableOpacity
-            style={styles.menuButton}
-            onPress={() => setPage('setting')}
-          >
-            <Text style={styles.menuItem}>Settings</Text>
-          </TouchableOpacity>
-
+          {page === 'setting' && (
+            <Setting
+              textSize={textSize}
+              setTextSize={setTextSize}
+            />
+          )}
         </View>
 
+        {/* MODERN BOTTOM NAVIGATION */}
+        <View style={styles.bottomMenu}>
+          {NAV_ITEMS.map((item) => {
+            const isActive = page === item.page;
+
+            return (
+              <TouchableOpacity
+                key={item.page}
+                testID={item.testID}
+                accessibilityRole="button"
+                accessibilityLabel={item.label}
+                accessibilityState={{ selected: isActive }}
+                activeOpacity={0.75}
+                style={[
+                  styles.menuButton,
+                  isActive && styles.activeMenuButton,
+                ]}
+                onPress={() => setPage(item.page)}
+              >
+                <View
+                  style={[
+                    styles.iconContainer,
+                    isActive && styles.activeIconContainer,
+                  ]}
+                >
+                  <Ionicons
+                    name={
+                      isActive
+                        ? item.icon.replace('-outline', '') as React.ComponentProps<typeof Ionicons>['name']
+                        : item.icon
+                    }
+                    size={23}
+                    color={isActive ? '#167D55' : '#8B95A5'}
+                  />
+                </View>
+
+                <Text
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  style={[
+                    styles.menuItem,
+                    isActive && styles.activeMenuItem,
+                  ]}
+                >
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </View>
     </LanguageProvider>
   );
 }
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F4F7F5',
   },
 
-  scrollView: {
+  pageContent: {
     flex: 1,
   },
 
-  scrollContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    paddingBottom: 100,
-  },
-
+  // Floating navigation bar
   bottomMenu: {
     position: 'absolute',
-    bottom: 50,
-    left: 0,
-    right: 0,
-
-    height: 70,
+    bottom: 28,
+    left: 14,
+    right: 14,
+    height: 72,
 
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
 
-    borderTopWidth: 1,
-    borderTopColor: '#000000',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 23,
+
+    paddingHorizontal: 4,
+
+    borderWidth: 1,
+    borderColor: '#E9EFEB',
+
+    shadowColor: '#183C2C',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.12,
+    shadowRadius: 14,
+    elevation: 8,
   },
 
   menuButton: {
     flex: 1,
     height: '100%',
-
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 1,
+  },
 
-    borderLeftWidth: 1,
-    borderLeftColor: '#000',
+  iconContainer: {
+    width: 40,
+    height: 34,
+    borderRadius: 13,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 3,
+  },
 
-    backgroundColor: '#207820',
+  activeIconContainer: {
+    backgroundColor: 'transparent',
   },
 
   menuItem: {
-    fontSize: 20,
-    color: '#fff',
+    fontSize: 10,
+    fontWeight: '500',
+    color: '#8B95A5',
+    textAlign: 'center',
   },
 
+  activeMenuItem: {
+    color: '#167D55',
+    fontWeight: '800',
+  },
+  activeMenuButton: {
+  height: '90%',
+  backgroundColor: '#E0F4E9',
+  borderRadius: 20,
+  },
 });
