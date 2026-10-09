@@ -118,8 +118,117 @@ export default function Setting({textSize, setTextSize}: TextSizeProps) {
           This setting controls the language
           used throughout the application.
         </Text>
-
       </View>
+      
+      <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>TEXT SIZE</Text>
+
+          <Text style={styles.sectionSub}>
+            Choose your preferred text size
+          </Text>
+      </View>
+
+      <TouchableOpacity
+        style={styles.languageCard}
+        onPress={() => setIsOpen2(!isOpen2)}
+      >
+
+        <View>
+          <Text style={styles.languageName}>
+            {textSize === 'x1' ? 'x1' : textSize === 'x2' ? 'x2' : 'x4'}
+          </Text>
+
+          <Text style={styles.languageSub}>
+            {textSize === 'x1' ? 'x1' : textSize === 'x2' ? 'x2' : 'x4'}
+          </Text>
+        </View>
+
+        <Text style={styles.arrow}>
+          {isOpen2 ? '⌃' : '⌄'}
+        </Text>
+
+      </TouchableOpacity>
+
+      {isOpen2 && (
+          <View style={styles.dropdownList}>
+
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => {
+                setTextSize('x1');
+                setIsOpen2(false);
+              }}
+            >
+
+              <View>
+                <Text style={styles.optionText}>
+                  x1
+                </Text>
+
+                <Text style={styles.optionSub}>
+                  x1
+                </Text>
+              </View>
+
+              {textSize === 'x1' && (
+                <Text style={styles.check}>✓</Text>
+              )}
+
+            </TouchableOpacity>
+
+
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => {
+                setTextSize('x2');
+                setIsOpen2(false);
+              }}
+            >
+
+              <View>
+                <Text style={styles.optionText}>
+                  x2
+                </Text>
+
+                <Text style={styles.optionSub}>
+                  x2
+                </Text>
+              </View>
+
+              {textSize === 'x2' && (
+                <Text style={styles.check}>✓</Text>
+              )}
+
+            </TouchableOpacity>
+
+
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => {
+                setTextSize('x4');
+                setIsOpen2(false);
+              }}
+            >
+
+              <View>
+                <Text style={styles.optionText}>
+                  x4
+                </Text>
+
+                <Text style={styles.optionSub}>
+                  x4
+                </Text>
+              </View>
+
+              {textSize === 'x4' && (
+                <Text style={styles.check}>✓</Text>
+              )}
+
+            </TouchableOpacity>
+
+          </View>
+        )}
+
     </ScrollView>
   </View>)}
 
