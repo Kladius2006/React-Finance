@@ -70,6 +70,12 @@ export const translations = {
     balance_warning_message: 'เงินในหมวดหมู่อื่นๆ ไม่พอชดเชยส่วนเกินนี้!',
 
     loading: 'กำลังโหลดข้อมูล...',
+
+    share_dialog_title: 'แชร์ QR Code',
+    share_unsupported: 'ไม่รองรับ',
+    share_unsupported_message: 'อุปกรณ์นี้ไม่รองรับการแชร์',
+    share_failed: 'แชร์ไม่สำเร็จ',
+    share_failed_message: 'ลองใหม่อีกครั้ง',
   },
 
   en: {
@@ -142,6 +148,12 @@ export const translations = {
     balance_warning_message: 'There is not enough money in other categories to cover this excess!',
 
     loading: 'Loading...',
+
+    share_dialog_title: 'Share QR Code',
+    share_unsupported: 'Not supported',
+    share_unsupported_message: 'This device does not support sharing',
+    share_failed: 'Share failed',
+    share_failed_message: 'Please try again',
   },
 
 };
