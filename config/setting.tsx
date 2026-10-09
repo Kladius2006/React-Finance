@@ -42,7 +42,10 @@ export default function Setting({textSize, setTextSize}: TextSizeProps) {
           </Text>
         </View>
 
-      <TouchableOpacity style={styles.languageCard} onPress={() => setIsOpen1(!isOpen1)}>
+      <TouchableOpacity
+      testID='Language'
+      style={styles.languageCard}
+      onPress={() => setIsOpen1(!isOpen1)}>
         <View>
           <Text style={styles.languageName}>
             {lang === 'th' ? 'ภาษาไทย' : 'English'}
@@ -58,6 +61,7 @@ export default function Setting({textSize, setTextSize}: TextSizeProps) {
         <View style={styles.dropdownList}>
 
           <TouchableOpacity
+            testID='LanguageTH'
             style={styles.option}
             onPress={() => {
               setLang('th');
@@ -82,6 +86,7 @@ export default function Setting({textSize, setTextSize}: TextSizeProps) {
           </TouchableOpacity>
 
           <TouchableOpacity
+            testID='LanguageEN'
             style={styles.option}
             onPress={() => {
               setLang('en');
@@ -129,6 +134,7 @@ export default function Setting({textSize, setTextSize}: TextSizeProps) {
       </View>
 
       <TouchableOpacity
+        testID='textSize'
         style={styles.languageCard}
         onPress={() => setIsOpen2(!isOpen2)}
       >
@@ -153,6 +159,7 @@ export default function Setting({textSize, setTextSize}: TextSizeProps) {
           <View style={styles.dropdownList}>
 
             <TouchableOpacity
+              testID='textSizeX1'
               style={styles.option}
               onPress={() => {
                 setTextSize('x1');
@@ -178,6 +185,7 @@ export default function Setting({textSize, setTextSize}: TextSizeProps) {
 
 
             <TouchableOpacity
+              testID='textSizeX2'
               style={styles.option}
               onPress={() => {
                 setTextSize('x2');
@@ -203,6 +211,7 @@ export default function Setting({textSize, setTextSize}: TextSizeProps) {
 
 
             <TouchableOpacity
+              testID='textSizeX4'
               style={styles.option}
               onPress={() => {
                 setTextSize('x4');

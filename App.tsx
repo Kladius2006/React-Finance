@@ -29,6 +29,7 @@ const NAV_ITEMS: {
     page: 'home',
     label: 'Home',
     icon: 'home-outline',
+    testID: 'Home',
   },
   {
     page: 'add',
@@ -52,6 +53,7 @@ const NAV_ITEMS: {
     page: 'setting',
     label: 'Settings',
     icon: 'settings-outline',
+    testID: 'Settings',
   },
 ];
 

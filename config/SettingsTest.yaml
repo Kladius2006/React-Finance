@@ -1,0 +1,23 @@
+appId: com.it_twins.Piggy_gold
+---
+- launchApp
+- tapOn:
+    id: "Settings"
+
+- tapOn:
+    id: "textSize"
+
+- scroll
+
+- tapOn:
+    id: "textSizeX4"
+
+- assertVisible: 'x4'
+
+- tapOn:
+    id: "Language"
+
+- tapOn:
+    id: "LanguageEN"
+
+- assertVisible: 'English'
