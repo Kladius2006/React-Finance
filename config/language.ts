@@ -83,7 +83,7 @@ export const translations = {
 
     // หน้า Home
     balance: 'Balance',
-    income: 'Ialance:',
+    income: 'Income:',
     expenses: 'Expenses',
     non_data: 'No data recorded.',
 
