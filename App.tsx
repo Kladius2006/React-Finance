@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 14,
     elevation: 8,
+    marginBottom: 20,
   },
 
   menuButton: {

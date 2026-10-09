@@ -30,19 +30,19 @@ export default function Home({ transactions = [] }: HomeProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Money Expo</Text>
+      <Text style={styles.title}>Piggy Gold</Text>
 
       <View style={styles.content}>
         <View style={styles.summaryCard}>
           <Text style={styles.summaryLabel}>{t.balance}</Text>
-          <Text style={[styles.summaryBalance, { color: balance >= 0 ? '#34C759' : '#FF3B30' }]}>
+          <Text style={[styles.summaryBalance, { color: balance >= 0 ? '#29a248' : '#cb322a' }]}>
             ฿{balance.toLocaleString('th-TH', { minimumFractionDigits: 2 })}
           </Text>
           <View style={styles.summaryRow}>
-            <Text style={{ color: '#34C759', fontWeight: '600' }}>
+            <Text style={{ color: '#29a248', fontWeight: '600' }}>
               {t.income} +฿{totalIncome.toLocaleString()}
             </Text>
-            <Text style={{ color: '#FF3B30', fontWeight: '600' }}>
+            <Text style={{ color: '#cb322a', fontWeight: '600' }}>
               {t.expenses}: -฿{totalExpense.toLocaleString()}
             </Text>
           </View>

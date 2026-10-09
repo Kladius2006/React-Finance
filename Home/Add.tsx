@@ -75,8 +75,8 @@ export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenP
     backgroundColor: '#e0e0e0',
     alignItems: 'center',
   },
-  incomeActiveBtn: { backgroundColor: '#34C759' },
-  expenseActiveBtn: { backgroundColor: '#FF3B30' },
+  incomeActiveBtn: { backgroundColor: '#29a248' },
+  expenseActiveBtn: { backgroundColor: '#cb322a' },
   typeBtnText: { fontWeight: 'bold', color: '#555' },
   activeText: { color: '#ffffff' },
   input: {
@@ -90,7 +90,7 @@ export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenP
     fontSize: 16,
   },
   saveButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#346ca4',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
