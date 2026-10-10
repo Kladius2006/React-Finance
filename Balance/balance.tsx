@@ -25,6 +25,10 @@ LogBox.ignoreLogs([
 
 const STORAGE_KEY = '@money_balance_categories_v1';
 
+type BalanceProp = {
+  textMultiplier: number;
+}
+
 interface Category {
   id: string;
   name: string;
@@ -32,9 +36,9 @@ interface Category {
   spent: number;
 }
 
-export default function Balance() {
+export default function Balance({textMultiplier}: BalanceProp) {
   // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
-  const { lang } = useLanguage(); 
+  const { lang } = useLanguage();
   const t = translations[lang];
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -180,6 +184,193 @@ export default function Balance() {
   const totalAllocated = categories.reduce((sum, item) => sum + item.allocated, 0);
   const totalSpent = categories.reduce((sum, item) => sum + item.spent, 0);
 
+  const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f6fa',
+    paddingHorizontal: 16,
+    paddingTop: 10,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f6fa',
+  },
+  summaryContainer: {
+    backgroundColor: '#2c3e50',
+    padding: 16,
+    borderRadius: 12,
+    marginTop: 40,
+    marginBottom: 12,
+  },
+  summaryTitle: {
+    color: '#ecf0f1',
+    fontSize: 14 * textMultiplier,
+    marginBottom: 6,
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  summaryText: {
+    color: '#fff',
+    fontSize: 16 * textMultiplier,
+    fontWeight: 'bold',
+  },
+  addForm: {
+    flexDirection: 'row',
+    marginBottom: 16,
+    gap: 8,
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 14 * textMultiplier,
+    borderWidth: 1,
+    borderColor: '#ddd',
+  },
+  addButton: {
+    backgroundColor: '#3498db',
+    width: 44,
+    height: 44,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontSize: 24 * textMultiplier,
+    fontWeight: 'bold',
+  },
+  sectionHeader: {
+    fontSize: 13 * textMultiplier,
+    color: '#7f8c8d',
+    marginBottom: 8,
+    fontWeight: '600',
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+  },
+  emptyText: {
+    fontSize: 16 * textMultiplier,
+    color: '#95a5a6',
+    fontWeight: 'bold',
+  },
+  emptySubText: {
+    fontSize: 12 * textMultiplier,
+    color: '#bdc3c7',
+    marginTop: 4,
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 10,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  cardActive: {
+    backgroundColor: '#eaf2f8',
+    borderColor: '#3498db',
+    borderWidth: 1,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  rightHeaderContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  priorityBadge: {
+    backgroundColor: '#e0e0e0',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    fontSize: 12 * textMultiplier,
+    fontWeight: 'bold',
+    color: '#555',
+  },
+  categoryName: {
+    fontSize: 16 * textMultiplier,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+  },
+  dragHint: {
+    fontSize: 12 * textMultiplier,
+    color: '#7f8c8d',
+  },
+  deleteButton: {
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
+  deleteText: {
+    color: '#e74c3c',
+    fontSize: 16 * textMultiplier,
+    fontWeight: 'bold',
+  },
+  cardDetail: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    backgroundColor: '#f8f9fa',
+    padding: 8,
+    borderRadius: 6,
+  },
+  detailText: {
+    fontSize: 13 * textMultiplier,
+    color: '#666',
+  },
+  bold: {
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  spendInputRow: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+  },
+  spendInput: {
+    flex: 1,
+    backgroundColor: '#f8f9fa',
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    fontSize: 13 * textMultiplier,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  spendSubmitButton: {
+    backgroundColor: '#e74c3c',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  spendSubmitText: {
+    color: '#fff',
+    fontSize: 12 * textMultiplier,
+    fontWeight: 'bold',
+  },
+});
+
   const renderItem = ({ item, drag, isActive, getIndex }: RenderItemParams<Category>) => {
     const index = getIndex() ?? 0;
     const remaining = item.allocated - item.spent;
@@ -270,6 +461,7 @@ export default function Balance() {
             testID="category_name"
             style={[styles.input, { flex: 2 }]}
             placeholder={t.category_name_placeholder}
+            placeholderTextColor="#808080"
             value={newName}
             onChangeText={setNewName}
           />
@@ -277,6 +469,7 @@ export default function Balance() {
             testID="budget"
             style={[styles.input, { flex: 1.5 }]}
             placeholder={t.budget_placeholder}
+            placeholderTextColor="#808080"
             keyboardType="numeric"
             value={newBudget}
             onChangeText={setNewBudget}
@@ -310,190 +503,3 @@ export default function Balance() {
     </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f6fa',
-    paddingHorizontal: 16,
-    paddingTop: 10,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f6fa',
-  },
-  summaryContainer: {
-    backgroundColor: '#2c3e50',
-    padding: 16,
-    borderRadius: 12,
-    marginTop: 40,
-    marginBottom: 12,
-  },
-  summaryTitle: {
-    color: '#ecf0f1',
-    fontSize: 14,
-    marginBottom: 6,
-  },
-  summaryRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  summaryText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  addForm: {
-    flexDirection: 'row',
-    marginBottom: 16,
-    gap: 8,
-  },
-  input: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    fontSize: 14,
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
-  addButton: {
-    backgroundColor: '#3498db',
-    width: 44,
-    height: 44,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  sectionHeader: {
-    fontSize: 13,
-    color: '#7f8c8d',
-    marginBottom: 8,
-    fontWeight: '600',
-  },
-  emptyContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 40,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: '#95a5a6',
-    fontWeight: 'bold',
-  },
-  emptySubText: {
-    fontSize: 12,
-    color: '#bdc3c7',
-    marginTop: 4,
-  },
-  card: {
-    backgroundColor: '#fff',
-    padding: 14,
-    borderRadius: 10,
-    marginBottom: 10,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
-  cardActive: {
-    backgroundColor: '#eaf2f8',
-    borderColor: '#3498db',
-    borderWidth: 1,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  rightHeaderContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  priorityBadge: {
-    backgroundColor: '#e0e0e0',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#555',
-  },
-  categoryName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
-  dragHint: {
-    fontSize: 12,
-    color: '#7f8c8d',
-  },
-  deleteButton: {
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  deleteText: {
-    color: '#e74c3c',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  cardDetail: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-    backgroundColor: '#f8f9fa',
-    padding: 8,
-    borderRadius: 6,
-  },
-  detailText: {
-    fontSize: 13,
-    color: '#666',
-  },
-  bold: {
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  spendInputRow: {
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
-  },
-  spendInput: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    fontSize: 13,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  spendSubmitButton: {
-    backgroundColor: '#e74c3c',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  spendSubmitText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-});

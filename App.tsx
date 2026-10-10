@@ -71,6 +71,8 @@ export default function App() {
 
   const textMultipliers: Record<string, number> = {
     x1: 1,
+    'x1.2': 1.2,
+    'x1.5': 1.5,
     x2: 2,
     x4: 4,
   };
@@ -85,7 +87,9 @@ export default function App() {
         {/* PAGE CONTENT */}
         <View style={styles.pageContent}>
           {page === 'home' && (
-            <Home transactions={transactions} />
+            <Home
+            transactions={transactions}
+            textMultiplier={textMultiplier} />
           )}
 
           {page === 'add' && (
@@ -96,12 +100,13 @@ export default function App() {
             />
           )}
 
-          {page === 'balance' && <Balance />}
+          {page === 'balance' && <Balance textMultiplier={textMultiplier} />}
 
-          {page === 'qr_code' && <GroupBillSplitUI />}
+          {page === 'qr_code' && <GroupBillSplitUI textMultiplier={textMultiplier}/>}
 
           {page === 'setting' && (
             <Setting
+              textMultiplier={textMultiplier}
               textSize={textSize}
               setTextSize={setTextSize}
             />

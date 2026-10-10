@@ -3,18 +3,22 @@ appId: com.it_twins.Piggy_gold
 - launchApp
 - tapOn:
     id: "IncomeExpense"
-- assertVisible: "หน้าเพิ่มรายการใหม่"
+- assertVisible: "การเพิ่มรายการใหม่"
 - tapOn:
     id: "Amount"
 - inputText: "100"
 - tapOn:
     id: "Description"
-- inputText: "ค่าข้าว"    
-- assertVisible: "100"
-- assertVisible: "ค่าข้าว"
+- inputText: "ค่าข้าว"  
+
+- hideKeyboard 
 - tapOn:
     id: "Save" 
-- assertVisible: "Money Expo"
+
+- assertVisible: "-฿100"
+- assertVisible: "ค่าข้าว"
+
+- assertVisible: "Piggy Gold"
 - tapOn: 
     id: "IncomeExpense"
 - tapOn:
@@ -24,14 +28,15 @@ appId: com.it_twins.Piggy_gold
 - inputText: "500"
 - tapOn:
     id: "Description"
-- inputText: "ได้เงิน"    
-- assertVisible: "500"
-- assertVisible: "ได้เงิน"
+- inputText: "ได้เงิน"   
+- hideKeyboard 
 - tapOn:
     id: "Save"
-- assertVisible: "Money Expo"
+- assertVisible: "+฿500"
+- assertVisible: "ได้เงิน"
+- assertVisible: "Piggy Gold"
 - tapOn:
     id: "IncomeExpense"
 - tapOn:
     id: "Back"
-- assertVisible: "Money Expo"
+- assertVisible: "Piggy Gold"

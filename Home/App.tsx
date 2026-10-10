@@ -11,9 +11,10 @@ type HomeProps = {
     amount: number;
     note: string;
   }>;
+  textMultiplier: number;
 };
 
-export default function Home({ transactions = [] }: HomeProps) {
+export default function Home({ transactions = [], textMultiplier }: HomeProps) {
   // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
   const { lang } = useLanguage(); 
   const t = translations[lang];
@@ -28,6 +29,61 @@ export default function Home({ transactions = [] }: HomeProps) {
 
   const balance = totalIncome - totalExpense;
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#f5f5f5',
+    },
+    content: {
+      flex: 1,
+      marginTop: 60,
+      paddingHorizontal: 20,
+      paddingBottom: 80, 
+    },
+    title: {
+      fontSize: 22 * textMultiplier,
+      textAlign: 'center',
+      top: 40,
+      fontWeight: 'bold',
+      color: '#333',
+    },
+    summaryCard: {
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 16,
+      elevation: 2,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.1,
+      shadowRadius: 2,
+    },
+    summaryLabel: { fontSize: 14 * textMultiplier, color: '#666' },
+    summaryBalance: { fontSize: 26 * textMultiplier, fontWeight: 'bold', marginVertical: 4 },
+    summaryRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 8,
+      paddingTop: 8,
+      borderTopWidth: 1,
+      borderTopColor: '#eee',
+    },
+    listSection: { flex: 1 },
+    emptyText: { textAlign: 'center', color: '#999', marginTop: 30 },
+    itemCard: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+      padding: 12,
+      borderRadius: 8,
+      marginBottom: 8,
+    },
+    itemNote: { fontSize: 16 * textMultiplier, fontWeight: '500', color: '#333' },
+    itemDate: { fontSize: 12 * textMultiplier, color: '#999', marginTop: 2 },
+    itemAmount: { fontSize: 16 * textMultiplier, fontWeight: 'bold' },
+  });
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Piggy Gold</Text>
@@ -39,10 +95,10 @@ export default function Home({ transactions = [] }: HomeProps) {
             ฿{balance.toLocaleString('th-TH', { minimumFractionDigits: 2 })}
           </Text>
           <View style={styles.summaryRow}>
-            <Text style={{ color: '#29a248', fontWeight: '600' }}>
+            <Text style={{ color: '#29a248', fontWeight: '600',fontSize: 15 * textMultiplier }}>
               {t.income} +฿{totalIncome.toLocaleString()}
             </Text>
-            <Text style={{ color: '#cb322a', fontWeight: '600' }}>
+            <Text style={{ color: '#cb322a', fontWeight: '600',fontSize: 15 * textMultiplier }}>
               {t.expenses}: -฿{totalExpense.toLocaleString()}
             </Text>
           </View>
@@ -78,58 +134,3 @@ export default function Home({ transactions = [] }: HomeProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  content: {
-    flex: 1,
-    marginTop: 60,
-    paddingHorizontal: 20,
-    paddingBottom: 80, 
-  },
-  title: {
-    fontSize: 22,
-    textAlign: 'center',
-    top: 40,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  summaryCard: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
-  summaryLabel: { fontSize: 14, color: '#666' },
-  summaryBalance: { fontSize: 26, fontWeight: 'bold', marginVertical: 4 },
-  summaryRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-    paddingTop: 8,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-  },
-  listSection: { flex: 1 },
-  emptyText: { textAlign: 'center', color: '#999', marginTop: 30 },
-  itemCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  itemNote: { fontSize: 16, fontWeight: '500', color: '#333' },
-  itemDate: { fontSize: 12, color: '#999', marginTop: 2 },
-  itemAmount: { fontSize: 16, fontWeight: 'bold' },
-});

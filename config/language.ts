@@ -5,7 +5,7 @@ export const translations = {
     // หน้าเพิ่มรายรับ-จ่าย
     date: 'วันที่ (ปี-เดือน-วัน)',
     add_new_transaction: 'การเพิ่มรายการใหม่',
-    category: 'ประเภทการยการ',
+    category: 'ประเภทรายการ',
     value: 'จำนวนเงิน (บาท)',
     details: 'รายละเอียด/หมายเหตุ',
 

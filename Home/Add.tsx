@@ -55,7 +55,7 @@ export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenP
     backgroundColor: '#f5f5f5',
   },
   title: {
-    fontSize: 22,
+    fontSize: 22 * textMultiplier,
     textAlign: 'center',
     top: 50,
     fontWeight: 'bold',
@@ -143,6 +143,7 @@ export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenP
           value={date}
           onChangeText={setDate}
           placeholder="YYYY-MM-DD"
+          placeholderTextColor="#808080"
         />
 
         <Text style={styles.label}>{t.value}</Text>
@@ -152,6 +153,7 @@ export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenP
           value={amount}
           onChangeText={setAmount}
           placeholder="0.00"
+          placeholderTextColor="#808080"
           keyboardType="numeric"
         />
 
@@ -162,6 +164,7 @@ export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenP
           value={note}
           onChangeText={setNote}
           placeholder={lang === 'th' ? "เช่น ค่าข้าว, เงินเดือน" : "e.g., Food, Salary"}
+          placeholderTextColor="#808080"
         />
 
         <Pressable style={styles.saveButton} testID='Save' onPress={handleSave}>

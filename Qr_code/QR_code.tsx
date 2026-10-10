@@ -11,7 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import {styles} from './QR_code_styles'
+import {getQRStyles} from './QR_code_styles'
 import {translations} from '../config/language'
 import QRCode from 'react-native-qrcode-svg';
 import { captureRef } from 'react-native-view-shot';
@@ -25,7 +25,14 @@ interface Participant {
   isMe?: boolean;
 }
 
-export default function GroupBillSplitUI() {
+interface QRProp {
+  textMultiplier: number;
+}
+
+export default function GroupBillSplitUI({textMultiplier}: QRProp) {
+
+  const styles = getQRStyles(textMultiplier);
+
   // สถานะเก็บยอดเงินรวม
   const [totalAmount, setTotalAmount] = useState<string>('');
   // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
@@ -145,6 +152,7 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
               testID="input_Value"
               style={styles.inputField}
               placeholder="0.00"
+              placeholderTextColor="#808080"
               keyboardType="numeric"
               textAlign="center"
               value={totalAmount}
