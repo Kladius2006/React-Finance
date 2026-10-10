@@ -91,6 +91,7 @@ export default function Setting({textSize, setTextSize, textMultiplier}: TextSiz
       shadowRadius: 15,
 
       elevation: 4,
+      marginBottom: 20,
     },
 
     languageName: {
@@ -157,27 +158,6 @@ export default function Setting({textSize, setTextSize, textMultiplier}: TextSiz
       color: '#34C759',
     },
 
-
-    // Bottom information
-    infoCard: {
-      marginTop: 30,
-      marginBottom: 20,
-      backgroundColor: '#172033',
-      borderRadius: 20,
-      padding: 22,
-    },
-
-    infoTitle: {
-      fontSize: 16 * textMultiplier,
-      fontWeight: '700',
-      color: '#ffffff',
-      marginBottom: 8,
-    },
-    infoText: {
-      fontSize: 13 * textMultiplier,
-      lineHeight: 20,
-      color: '#aeb7c5',
-    },
     scrollView: {
     flex: 1,
     },
@@ -285,18 +265,6 @@ export default function Setting({textSize, setTextSize, textMultiplier}: TextSiz
         </View>
       )}
 
-      <View style={styles.infoCard}>
-
-        <Text style={styles.infoTitle}>
-          App Language
-        </Text>
-
-        <Text style={styles.infoText}>
-          This setting controls the language
-          used throughout the application.
-        </Text>
-      </View>
-      
       <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>TEXT SIZE</Text>
 

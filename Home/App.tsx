@@ -32,34 +32,48 @@ export default function Home({ transactions = [], textMultiplier }: HomeProps) {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#f5f5f5',
+      backgroundColor: '#f8fafc',
     },
     content: {
       flex: 1,
-      marginTop: 60,
+      marginTop: 30,
       paddingHorizontal: 20,
       paddingBottom: 80, 
+    },
+    header: {
+      backgroundColor: '#2C3E50', 
+      paddingTop: 20,
+      paddingBottom: 24,
+      marginHorizontal: 16,
+      marginTop: 50,
+      borderRadius: 24,
+      alignItems: 'center',
+      elevation: 4,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.15,
+      shadowRadius: 6,
     },
     title: {
       fontSize: 22 * textMultiplier,
       textAlign: 'center',
-      top: 40,
       fontWeight: 'bold',
-      color: '#333',
+      color: '#FFFFFF',
+      letterSpacing: 0.5,
     },
     summaryCard: {
       backgroundColor: '#ffffff',
-      borderRadius: 12,
-      padding: 16,
-      marginBottom: 16,
-      elevation: 2,
+      borderRadius: 16,
+      padding: 20,
+      marginBottom: 20,
+      elevation: 3,
       shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
+      shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
       shadowRadius: 2,
     },
     summaryLabel: { fontSize: 14 * textMultiplier, color: '#666' },
-    summaryBalance: { fontSize: 26 * textMultiplier, fontWeight: 'bold', marginVertical: 4 },
+    summaryBalance: { fontSize: 32 * textMultiplier, fontWeight: 'bold', marginVertical: 4 },
     summaryRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -68,6 +82,12 @@ export default function Home({ transactions = [], textMultiplier }: HomeProps) {
       borderTopWidth: 1,
       borderTopColor: '#eee',
     },
+    sectionHeader: {
+      fontSize: 16 * textMultiplier,
+      fontWeight: '600',
+      color: '#334155',
+      marginBottom: 12,
+    },
     listSection: { flex: 1 },
     emptyText: { textAlign: 'center', color: '#999', marginTop: 30 },
     itemCard: {
@@ -75,9 +95,14 @@ export default function Home({ transactions = [], textMultiplier }: HomeProps) {
       justifyContent: 'space-between',
       alignItems: 'center',
       backgroundColor: '#fff',
-      padding: 12,
-      borderRadius: 8,
-      marginBottom: 8,
+      padding: 16,
+      borderRadius: 12,
+      marginBottom: 10,
+      elevation: 1,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.05,
+      shadowRadius: 2,
     },
     itemNote: { fontSize: 16 * textMultiplier, fontWeight: '500', color: '#333' },
     itemDate: { fontSize: 12 * textMultiplier, color: '#999', marginTop: 2 },
@@ -86,7 +111,10 @@ export default function Home({ transactions = [], textMultiplier }: HomeProps) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Piggy Gold</Text>
+
+      <View style={styles.header}>
+        <Text style={styles.title}>Piggy Gold</Text>
+      </View>
 
       <View style={styles.content}>
         <View style={styles.summaryCard}>
@@ -103,6 +131,8 @@ export default function Home({ transactions = [], textMultiplier }: HomeProps) {
             </Text>
           </View>
         </View>
+
+        <Text style={styles.sectionHeader}>{t.recent_transections}</Text>
 
         <View style={styles.listSection}>
           <FlatList
@@ -121,7 +151,7 @@ export default function Home({ transactions = [], textMultiplier }: HomeProps) {
                 <Text
                   style={[
                     styles.itemAmount,
-                    { color: item.type === 'income' ? '#34C759' : '#FF3B30' },
+                    { color: item.type === 'income' ? '#29a248' : '#cb322a' },
                   ]}
                 >
                   {item.type === 'income' ? '+' : '-'}฿{item.amount.toLocaleString()}

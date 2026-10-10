@@ -4,7 +4,7 @@ export const translations = {
 
     // หน้าเพิ่มรายรับ-จ่าย
     date: 'วันที่ (ปี-เดือน-วัน)',
-    add_new_transaction: 'การเพิ่มรายการใหม่',
+    add_new_transaction: 'เพิ่มรายการใหม่',
     category: 'ประเภทรายการ',
     value: 'จำนวนเงิน (บาท)',
     details: 'รายละเอียด/หมายเหตุ',
@@ -14,6 +14,7 @@ export const translations = {
     income: 'รายรับ:',
     expenses: 'รายจ่าย',
     non_data: 'ยังไม่มีการบันทึก',
+    recent_transections: 'รายการล่าสุด',
 
     // หน้า QR_code
     QR_title: 'การหารบิลกลุ่ม',
@@ -89,9 +90,10 @@ export const translations = {
 
     // หน้า Home
     balance: 'Balance',
-    income: 'Income:',
+    income: 'Incomes:',
     expenses: 'Expenses',
     non_data: 'No data recorded.',
+    recent_transections: 'Recent Transactions',
 
     // หน้า QR_code
     QR_title: 'Group Bill Split',

@@ -55,18 +55,34 @@ export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenP
     backgroundColor: '#f5f5f5',
   },
   title: {
+    flex: 1,
     fontSize: 22 * textMultiplier,
     textAlign: 'center',
-    top: 50,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#FFFFFF',
   },
+    header: {
+        flexDirection: 'row',
+        backgroundColor: '#2C3E50',
+        paddingVertical: 16,
+        paddingHorizontal: 18,
+        marginHorizontal: 16,
+        marginBottom: 12,
+        borderRadius: 16,
+        alignItems: 'center',
+        marginTop: 50,
+        elevation: 3,
+        shadowColor: '#183C2C',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.10,
+        shadowRadius: 6,
+        },
   formContent: {
     flex: 1,
-    marginTop: 80,
+    marginTop: 15,
     paddingHorizontal: 20,
   },
-  label: { fontSize: 14 * textMultiplier, fontWeight: 'bold', color: '#444', marginBottom: 6 },
+  label: { fontSize: 14 * textMultiplier, fontWeight: 'bold', color: '#2C3E50', marginBottom: 6 },
   typeContainer: { flexDirection: 'row', gap: 10, marginBottom: 16 },
   typeBtn: {
     flex: 1,
@@ -113,7 +129,9 @@ export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenP
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t.add_new_transaction}</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>{t.add_new_transaction}</Text>
+      </View>
       
       <View style={styles.formContent}>
         <Text style={styles.label}>{t.category}</Text>
