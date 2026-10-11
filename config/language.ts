@@ -52,6 +52,15 @@ export const translations = {
     spend_placeholder: 'จำนวนเงินที่จ่าย (บาท)',
     save_spend: 'บันทึกจ่าย',
 
+    // Setting
+    settings_title: 'การตั้งค่า',
+    language_section: 'ภาษา',
+    choose_language: 'เลือกภาษาที่คุณต้องการ',
+    thai_language: 'ภาษาไทย',
+    english_language: 'English',
+    text_size_section: 'ขนาดตัวอักษร',
+    choose_text_size: 'เลือกขนาดตัวอักษรที่คุณต้องการ',
+
     // Alert
     error: 'เกิดข้อผิดพลาด',
     load_error: 'ไม่สามารถโหลดข้อมูลจากหน่วยความจำได้',
@@ -130,6 +139,15 @@ export const translations = {
 
     spend_placeholder: 'Amount spent (THB)',
     save_spend: 'Save Expense',
+
+    // Setting
+    settings_title: 'Settings',
+    language_section: 'LANGUAGE',
+    choose_language: 'Choose your preferred language',
+    thai_language: 'Thai',
+    english_language: 'English',
+    text_size_section: 'TEXT SIZE',
+    choose_text_size: 'Choose your preferred text size',
 
     // Alert
     error: 'Error',

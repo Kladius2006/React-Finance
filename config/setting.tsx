@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView,
 } from 'react-native';
 // 1. นำเข้า useLanguage จากไฟล์ Context ที่เราสร้าง
-import { useLanguage } from '../config/LanguageContext'; 
+import { translations } from '../config/language';
+import { useLanguage } from './LanguageContext'; 
 
 type TextSizeProps = {
   textSize: string;
@@ -13,6 +14,7 @@ type TextSizeProps = {
 export default function Setting({textSize, setTextSize, textMultiplier}: TextSizeProps) {
   // 2. เรียกใช้งานตัวแปรส่วนกลาง (แทนที่ useState ตัวเดิม)
   const {lang, setLang } = useLanguage();
+  const t = translations[lang];
   const [isOpen1, setIsOpen1] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
 
@@ -59,9 +61,9 @@ export default function Setting({textSize, setTextSize, textMultiplier}: TextSiz
     },
 
     sectionTitle: {
-      fontSize: 13 * textMultiplier,
+      fontSize: 20 * textMultiplier,
       fontWeight: '800',
-      letterSpacing: 1.5,
+      letterSpacing: 0.5,
       color: '#172033',
       marginBottom: 5,
     },
@@ -171,10 +173,9 @@ export default function Setting({textSize, setTextSize, textMultiplier}: TextSiz
     <View style={styles.container}>
 
       <View style={styles.header}>
-        <Text style={styles.smallTitle}>PERSONAL</Text>
         <View style={styles.titleRow}>
           <Text style={styles.gear}>⚙</Text>
-          <Text style={styles.title}>Settings</Text>
+          <Text style={styles.title}>{t.settings_title}</Text>
         </View>
       </View>
 
@@ -187,10 +188,10 @@ export default function Setting({textSize, setTextSize, textMultiplier}: TextSiz
       >
 
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>LANGUAGE</Text>
+          <Text style={styles.sectionTitle}>{t.language_section}</Text>
 
           <Text style={styles.sectionSub}>
-            Choose your preferred language
+            {t.choose_language}
           </Text>
         </View>
 
@@ -200,7 +201,7 @@ export default function Setting({textSize, setTextSize, textMultiplier}: TextSiz
       onPress={() => setIsOpen1(!isOpen1)}>
         <View>
           <Text style={styles.languageName}>
-            {lang === 'th' ? 'ภาษาไทย' : 'English'}
+            {lang === 'th' ? t.thai_language : t.english_language}
           </Text>
           <Text style={styles.languageSub}>
             {lang === 'th' ? 'Thai' : 'English'}
@@ -223,7 +224,7 @@ export default function Setting({textSize, setTextSize, textMultiplier}: TextSiz
 
             <View>
               <Text style={styles.optionText}>
-                ภาษาไทย
+                {t.thai_language}
               </Text>
 
               <Text style={styles.optionSub}>
@@ -248,7 +249,7 @@ export default function Setting({textSize, setTextSize, textMultiplier}: TextSiz
 
             <View>
               <Text style={styles.optionText}>
-                English
+                {t.english_language}
               </Text>
 
               <Text style={styles.optionSub}>
@@ -266,10 +267,10 @@ export default function Setting({textSize, setTextSize, textMultiplier}: TextSiz
       )}
 
       <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>TEXT SIZE</Text>
+          <Text style={styles.sectionTitle}>{t.text_size_section}</Text>
 
           <Text style={styles.sectionSub}>
-            Choose your preferred text size
+            {t.choose_text_size}
           </Text>
       </View>
 
