@@ -5,7 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   Modal,
-  FlatList,
+  ScrollView, 
   KeyboardAvoidingView,
   Platform,
   Alert,
@@ -35,7 +35,11 @@ export default function GroupBillSplitUI({textMultiplier}: QRProp) {
 
   // สถานะเก็บยอดเงินรวม
   const [totalAmount, setTotalAmount] = useState<string>('');
-  // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
+  
+  // ตั้งค่าเบอร์โทรศัพท์เริ่มต้นให้แสดงเป็น "-"
+  const [promptPayPhone, setPromptPayPhone] = useState<string>('-');
+
+  // การเปลี่ยนภาษา
   const { lang } = useLanguage(); 
   const t = translations[lang];
 
@@ -68,42 +72,42 @@ export default function GroupBillSplitUI({textMultiplier}: QRProp) {
     }
   };
 
-const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
-  let formattedPhone = mobileNumber.replace(/[^0-9]/g, '');
-  if (formattedPhone.startsWith('0')) {
-    formattedPhone = '0066' + formattedPhone.slice(1);
-  }
-
-  const formatField = (id: string, value: string) => {
-    const len = value.length.toString().padStart(2, '0');
-    return id + len + value;
-  };
-
-  const aid = 'A000000677010111';
-  const merchantAccount = formatField('29', formatField('00', aid) + formatField('01', formattedPhone));
-  const currency = '5303764'; 
-  const amtStr = amount.toFixed(2);
-  const amountField = formatField('54', amtStr);
-  const country = '5802TH';
-  const nameField = formatField('59', 'POMTPAY'); 
-
-  let dataToCrc = formatField('00', '01') +
-                  formatField('01', '12') +
-                  merchantAccount +
-                  currency +
-                  amountField +
-                  country +
-                  nameField +
-                  '6304';
-
-  let crc = 0xffff;
-  for (let i = 0; i < dataToCrc.length; i++) {
-    crc ^= dataToCrc.charCodeAt(i) << 8;
-    for (let b = 0; b < 8; b++) {
-      crc = crc & 0x8000 ? ((crc << 1) ^ 0x1021) & 0xffff : (crc << 1) & 0xffff;
+  const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
+    let formattedPhone = mobileNumber.replace(/[^0-9]/g, '');
+    if (formattedPhone.startsWith('0')) {
+      formattedPhone = '0066' + formattedPhone.slice(1);
     }
-  }
-  return dataToCrc + crc.toString(16).toUpperCase().padStart(4, '0');
+
+    const formatField = (id: string, value: string) => {
+      const len = value.length.toString().padStart(2, '0');
+      return id + len + value;
+    };
+
+    const aid = 'A000000677010111';
+    const merchantAccount = formatField('29', formatField('00', aid) + formatField('01', formattedPhone));
+    const currency = '5303764'; 
+    const amtStr = amount.toFixed(2);
+    const amountField = formatField('54', amtStr);
+    const country = '5802TH';
+    const nameField = formatField('59', 'POMTPAY'); 
+
+    let dataToCrc = formatField('00', '01') +
+                    formatField('01', '12') +
+                    merchantAccount +
+                    currency +
+                    amountField +
+                    country +
+                    nameField +
+                    '6304';
+
+    let crc = 0xffff;
+    for (let i = 0; i < dataToCrc.length; i++) {
+      crc ^= dataToCrc.charCodeAt(i) << 8;
+      for (let b = 0; b < 8; b++) {
+        crc = crc & 0x8000 ? ((crc << 1) ^ 0x1021) & 0xffff : (crc << 1) & 0xffff;
+      }
+    }
+    return dataToCrc + crc.toString(16).toUpperCase().padStart(4, '0');
   };
 
   const qrCardRef = useRef<View>(null);
@@ -132,49 +136,79 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
     setSelectedUser(user);
     setQrModalVisible(true);
   };
-  const PROMPTPAY_PHONE = '0989368545';
+
+  // ตรวจสอบตัวเลขเบอร์โทรศัพท์ (ตัดเครื่องหมาย - ออกแล้วนับตัวเลข)
+  const cleanPhoneNumber = promptPayPhone.replace(/[^0-9]/g, '');
 
   return (
-    <View style={[styles.container, { paddingTop: 30 }]}>
-      <View style={styles.mainContent}>
-        
-        {/* 1. ส่วนหัว */}
-        <View style={styles.header}>
-          <FontAwesome5 name="qrcode" size={28} color="#fff" style={styles.headerIcon} />
-          <Text style={styles.headerText}>{t.QR_title}</Text>
-        </View>
-
-        {/* 2. ส่วนกรอกจำนวนเงินรวม */}
-        <View style={styles.inputSection}>
-          <Text style={styles.sectionTitle}>{t.totalAmountLabel} ({t.currency})</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              testID="input_Value"
-              style={styles.inputField}
-              placeholder="0.00"
-              placeholderTextColor="#808080"
-              keyboardType="numeric"
-              textAlign="center"
-              value={totalAmount}
-              onChangeText={setTotalAmount}
-            />
+    <View style={styles.container}>
+      
+      {/* ห่อเนื้อหาทั้งหมดด้วย ScrollView เพื่อให้เลื่อนได้ทั้งหน้าจอ */}
+      <ScrollView 
+        contentContainerStyle={{ paddingTop: 30, paddingBottom: 140 }} 
+        showsVerticalScrollIndicator={true}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.mainContent}>
+          
+          {/* 1. ส่วนหัว */}
+          <View style={styles.header}>
+            <FontAwesome5 name="qrcode" size={28} color="#fff" style={styles.headerIcon} />
+            <Text style={styles.headerText}>{t.QR_title}</Text>
           </View>
-        </View>
 
-        {/* 3. รายชื่อผู้ร่วมหาร */}
-        <View style={styles.listHeader}>
-          <Text style={styles.subTitle}>{t.participants} ({participants.length} {t.people})</Text>
-          <TouchableOpacity testID="add_participant__button" style={styles.addCircleButton} onPress={() => setAddModalVisible(true)}>
-            <FontAwesome5 name="plus" size={20} color="#fff" />
-          </TouchableOpacity>
-        </View>
+          {/* 2. ส่วนกรอกจำนวนเงินรวม */}
+          <View style={styles.inputSection}>
+            <Text style={styles.sectionTitle}>{t.totalAmountLabel} ({t.currency})</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                testID="input_Value"
+                style={styles.inputField}
+                placeholder="0.00"
+                placeholderTextColor="#808080"
+                keyboardType="numeric"
+                textAlign="center"
+                value={totalAmount}
+                onChangeText={setTotalAmount}
+              />
+            </View>
+          </View>
 
-        <FlatList
-          data={participants}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 20 }}
-          renderItem={({ item }) => (
-            <TouchableOpacity testID={`user_row_${item.name}__button`} style={styles.userRow} onPress={() => openQRModal(item)}>
+          {/* ส่วนกรอกเบอร์โทรศัพท์ PromptPay */}
+          <View style={styles.inputSection}>
+            <Text style={styles.sectionTitle}>
+              {lang === 'th' ? 'เบอร์โทร PromptPay (สำหรับรับเงิน)' : 'PromptPay Number'}
+            </Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.inputField}
+                placeholder="-"
+                placeholderTextColor="#808080"
+                keyboardType="phone-pad"
+                textAlign="center"
+                maxLength={10}
+                value={promptPayPhone}
+                onChangeText={setPromptPayPhone}
+              />
+            </View>
+          </View>
+
+          {/* 3. รายชื่อผู้ร่วมหาร */}
+          <View style={styles.listHeader}>
+            <Text style={styles.subTitle}>{t.participants} ({participants.length} {t.people})</Text>
+            <TouchableOpacity testID="add_participant__button" style={styles.addCircleButton} onPress={() => setAddModalVisible(true)}>
+              <FontAwesome5 name="plus" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
+
+          {/* วนลูปรายชื่อเพื่อนด้วย map แทนการใช้ FlatList */}
+          {participants.map((item) => (
+            <TouchableOpacity 
+              key={item.id}
+              testID={`user_row_${item.name}__button`} 
+              style={styles.userRow} 
+              onPress={() => openQRModal(item)}
+            >
               <Ionicons name="person-circle" size={55} color="#3b5998" />
               <View style={styles.userBadge}>
                 <Text style={styles.userNameText}>{displayName(item)}</Text>
@@ -184,12 +218,13 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
                 </View>
               </View>
             </TouchableOpacity>
-          )}
-        />
-      </View>
+          ))}
+          
+        </View>
+      </ScrollView>
 
 
-      {/* 4. Modal เพิ่มชื่อผู้ร่วมหาร */}
+      {/* 4. Modal เพิ่มชื่อผู้ร่วมหาร (ยังคงอยู่ข้างนอก ScrollView) */}
       <Modal visible={addModalVisible} transparent={true} animationType="fade">
         <KeyboardAvoidingView style={styles.modalOverlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <View style={styles.addModalContent}>
@@ -215,7 +250,7 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
         </KeyboardAvoidingView>
       </Modal>
 
-      {/* 5. Modal QR Code */}
+      {/* 5. Modal QR Code (ยังคงอยู่ข้างนอก ScrollView) */}
       <Modal visible={qrModalVisible} transparent={true} animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.qrModalContent}>
@@ -230,12 +265,19 @@ const generatePromptPayPayload = (mobileNumber: string, amount: number) => {
               </View>
 
               <View style={styles.qrBox}>
-                <QRCode
-                  value={generatePromptPayPayload(PROMPTPAY_PHONE, parseFloat(splitAmount) || 0)}
-                  size={180}
-                  color="#3b5998"
-                  backgroundColor="white"
-                />
+                {/* ตรวจสอบว่ากรอกตัวเลขครบ 10 หลักหรือไม่ */}
+                {cleanPhoneNumber.length === 10 ? (
+                  <QRCode
+                    value={generatePromptPayPayload(promptPayPhone, parseFloat(splitAmount) || 0)}
+                    size={180}
+                    color="#3b5998"
+                    backgroundColor="white"
+                  />
+                ) : (
+                  <Text style={{ color: 'red', textAlign: 'center', padding: 20 }}>
+                    {lang === 'th' ? 'กรุณากรอกเบอร์โทรศัพท์ 10 หลักที่หน้าแรกก่อน' : 'Please enter 10-digit phone number first'}
+                  </Text>
+                )}
               </View>
 
               <Text style={styles.qrAmountText}>{t.payAmount} {splitAmount} {t.currency}</Text>
