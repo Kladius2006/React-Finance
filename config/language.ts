@@ -15,6 +15,7 @@ export const translations = {
     expenses: 'รายจ่าย',
     non_data: 'ยังไม่มีการบันทึก',
     recent_transections: 'รายการล่าสุด',
+    delete_transaction_message: 'ต้องการลบ "{note}" ใช่ไหม?',
 
     // หน้า QR_code
     QR_title: 'การหารบิลกลุ่ม',
@@ -103,6 +104,7 @@ export const translations = {
     expenses: 'Expenses',
     non_data: 'No data recorded.',
     recent_transections: 'Recent Transactions',
+    delete_transaction_message: 'Delete "{note}"?',
 
     // หน้า QR_code
     QR_title: 'Group Bill Split',

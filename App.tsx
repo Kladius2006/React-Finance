@@ -16,6 +16,7 @@ import Add from './Home/Add';
 import Balance from './Balance/balance';
 import GroupBillSplitUI from './Qr_code/QR_code';
 import Setting from './config/setting';
+import { useTransactions } from './useTransactions';
 
 type Page = 'home' | 'add' | 'balance' | 'qr_code' | 'setting';
 
@@ -60,10 +61,11 @@ const NAV_ITEMS: {
 export default function App() {
   const [page, setPage] = useState<Page>('home');
 
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const {transactions, addTransaction, removeTransaction, loaded} = useTransactions();
+  
 
   const handleSaveTransaction = (newTransaction: any) => {
-    setTransactions((previous) => [newTransaction, ...previous]);
+    addTransaction(newTransaction);
     setPage('home');
   };
 
@@ -79,6 +81,8 @@ export default function App() {
 
   const textMultiplier = textMultipliers[textSize];
 
+    if (!loaded) return null;
+
   return (
     <LanguageProvider>
       <View style={styles.container}>
@@ -89,7 +93,8 @@ export default function App() {
           {page === 'home' && (
             <Home
             transactions={transactions}
-            textMultiplier={textMultiplier} />
+            textMultiplier={textMultiplier}
+            onDelete={removeTransaction} />
           )}
 
           {page === 'add' && (

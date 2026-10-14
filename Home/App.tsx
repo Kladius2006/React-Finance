@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { translations } from '../config/language';
 import { useLanguage } from '../config/LanguageContext';
+
 
 type HomeProps = {
   transactions?: Array<{
@@ -12,9 +14,10 @@ type HomeProps = {
     note: string;
   }>;
   textMultiplier: number;
+  onDelete?: (id: string) => void;
 };
 
-export default function Home({ transactions = [], textMultiplier }: HomeProps) {
+export default function Home({ transactions = [], textMultiplier, onDelete }: HomeProps) {
   // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
   const { lang } = useLanguage(); 
   const t = translations[lang];
@@ -28,6 +31,21 @@ export default function Home({ transactions = [], textMultiplier }: HomeProps) {
     .reduce((sum, t) => sum + t.amount, 0);
 
   const balance = totalIncome - totalExpense;
+
+    const confirmDelete = (id: string, note: string) => {
+    Alert.alert(
+      t.confirm_delete,
+      t.delete_transaction_message.replace('{note}', note),
+      [
+        { text: t.cancel, style: 'cancel' },
+        {
+          text: t.delete,
+          style: 'destructive',
+          onPress: () => onDelete?.(id),
+        },
+      ]
+    );
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -107,6 +125,12 @@ export default function Home({ transactions = [], textMultiplier }: HomeProps) {
     itemNote: { fontSize: 16 * textMultiplier, fontWeight: '500', color: '#333' },
     itemDate: { fontSize: 12 * textMultiplier, color: '#999', marginTop: 2 },
     itemAmount: { fontSize: 16 * textMultiplier, fontWeight: 'bold' },
+    deleteButton: {
+      marginLeft: 12,
+      padding: 6,
+      borderRadius: 8,
+      backgroundColor: '#fdecea',
+    },
   });
 
   return (
@@ -148,6 +172,7 @@ export default function Home({ transactions = [], textMultiplier }: HomeProps) {
                   <Text style={styles.itemNote}>{item.note}</Text>
                   <Text style={styles.itemDate}>{item.date}</Text>
                 </View>
+
                 <Text
                   style={[
                     styles.itemAmount,
@@ -156,6 +181,17 @@ export default function Home({ transactions = [], textMultiplier }: HomeProps) {
                 >
                   {item.type === 'income' ? '+' : '-'}฿{item.amount.toLocaleString()}
                 </Text>
+
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => confirmDelete(item.id, item.note)}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                  accessibilityRole="button"
+                  accessibilityLabel={t.delete}
+                  testID={`Delete-${item.id}`}
+                >
+                  <Ionicons name="trash-outline" size={20} color="#cb322a" />
+                </TouchableOpacity>
               </View>
             )}
           />
