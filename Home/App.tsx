@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Alert, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Alert, TouchableOpacity, ScrollView} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { translations } from '../config/language';
 import { useLanguage } from '../config/LanguageContext';
@@ -53,7 +53,6 @@ export default function Home({ transactions = [], textMultiplier, onDelete }: Ho
       backgroundColor: '#f8fafc',
     },
     content: {
-      flex: 1,
       marginTop: 30,
       paddingHorizontal: 20,
       paddingBottom: 80, 
@@ -135,6 +134,11 @@ export default function Home({ transactions = [], textMultiplier, onDelete }: Ho
 
   return (
     <View style={styles.container}>
+      <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ paddingBottom: 30 }}
+      showsVerticalScrollIndicator={false}
+      >
 
       <View style={styles.header}>
         <Text style={styles.title}>Piggy Gold</Text>
@@ -159,15 +163,13 @@ export default function Home({ transactions = [], textMultiplier, onDelete }: Ho
         <Text style={styles.sectionHeader}>{t.recent_transections}</Text>
 
         <View style={styles.listSection}>
-          <FlatList
-            data={transactions}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={
-              <Text style={styles.emptyText}>{t.non_data}</Text>
-            }
-            renderItem={({ item }) => (
-              <View style={styles.itemCard}>
+          {transactions.length === 0 ? (
+            <Text style={styles.emptyText}>
+              {t.non_data}
+            </Text>
+          ) : (
+            transactions.map((item) => (
+              <View key={item.id} style={styles.itemCard}>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.itemNote}>{item.note}</Text>
                   <Text style={styles.itemDate}>{item.date}</Text>
@@ -176,10 +178,13 @@ export default function Home({ transactions = [], textMultiplier, onDelete }: Ho
                 <Text
                   style={[
                     styles.itemAmount,
-                    { color: item.type === 'income' ? '#29a248' : '#cb322a' },
+                    {
+                      color: item.type === 'income' ? '#29a248' : '#cb322a',
+                    },
                   ]}
                 >
-                  {item.type === 'income' ? '+' : '-'}฿{item.amount.toLocaleString()}
+                  {item.type === 'income' ? '+' : '-'}
+                  ฿{item.amount.toLocaleString()}
                 </Text>
 
                 <TouchableOpacity
@@ -193,10 +198,11 @@ export default function Home({ transactions = [], textMultiplier, onDelete }: Ho
                   <Ionicons name="trash-outline" size={20} color="#cb322a" />
                 </TouchableOpacity>
               </View>
-            )}
-          />
+            ))
+          )}
         </View>
       </View>
+      </ScrollView>
     </View>
   );
 }

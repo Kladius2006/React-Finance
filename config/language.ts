@@ -29,7 +29,7 @@ export const translations = {
     add: 'เพิ่ม',
     payAmount: 'ยอดจ่าย:',
     share: 'แชร์ให้เพื่อน',
-    me: 'กระผม',
+    me: 'ยอดของคุณ',
 
     // หน้า Balance
     total_balance: 'ยอดเงินรวมในระบบ',
@@ -118,14 +118,14 @@ export const translations = {
     add: 'Add',
     payAmount: 'Pay:',
     share: 'Share',
-    me: 'Me',
+    me: 'Your Amount',
 
     // หน้า Balance
     total_balance: 'Total Balance',
     total_allocated: 'Total Allocated',
     total_spent: 'Total Spent',
 
-    category_name_placeholder: 'Category name (e.g. Rent)',
+    category_name_placeholder: 'Category (e.g. Rent)',
     budget_placeholder: 'Budget (THB)',
 
     priority: 'Priority (Top = Most Important)',
