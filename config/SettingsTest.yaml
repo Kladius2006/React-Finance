@@ -10,9 +10,9 @@ appId: com.it_twins.Piggy_gold
 - scroll
 
 - tapOn:
-    id: "textSizeX4"
+    id: "textSizeX1.5"
 
-- assertVisible: 'x4'
+- assertVisible: 'x1.5'
 
 - tapOn:
     id: "Language"

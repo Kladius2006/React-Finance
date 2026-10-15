@@ -192,7 +192,7 @@ export default function Balance({textMultiplier}: BalanceProp) {
     return (
       <ScaleDecorator>
         <TouchableOpacity
-          testID={`category-card-${index}`}
+          testID={`category-card-${item.name}`}
           activeOpacity={0.9}
           onLongPress={drag}
           disabled={isActive}
@@ -231,6 +231,7 @@ export default function Balance({textMultiplier}: BalanceProp) {
           <View style={styles.spendInputRow}>
             <TextInput
               style={styles.spendInput}
+              testID={`amount-${item.name}`}
               placeholder={t.spend_placeholder}
               keyboardType="numeric"
               value={spendInputs[item.id] || ''}
@@ -238,7 +239,10 @@ export default function Balance({textMultiplier}: BalanceProp) {
             />
             <TouchableOpacity
               style={styles.spendSubmitButton}
-              onPress={() => handleSpend(item.id)}
+              testID={`save-spend-${item.name}`}
+              onPress={() => {
+                console.log('SAVE SPEND PRESSED:', item.name);
+                handleSpend(item.id)}}
             >
               <Text style={styles.spendSubmitText}>{t.save_spend}</Text>
             </TouchableOpacity>

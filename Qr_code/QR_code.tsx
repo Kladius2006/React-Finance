@@ -37,7 +37,7 @@ export default function GroupBillSplitUI({textMultiplier}: QRProp) {
   const [totalAmount, setTotalAmount] = useState<string>('');
   
   // ตั้งค่าเบอร์โทรศัพท์เริ่มต้นให้แสดงเป็น "-"
-  const [promptPayPhone, setPromptPayPhone] = useState<string>('-');
+  const [promptPayPhone, setPromptPayPhone] = useState<string>('');
 
   // การเปลี่ยนภาษา
   const { lang } = useLanguage(); 
@@ -182,6 +182,7 @@ export default function GroupBillSplitUI({textMultiplier}: QRProp) {
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.inputField}
+                testID = "phone_number"
                 placeholder="-"
                 placeholderTextColor="#808080"
                 keyboardType="phone-pad"

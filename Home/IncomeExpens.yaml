@@ -3,7 +3,7 @@ appId: com.it_twins.Piggy_gold
 - launchApp
 - tapOn:
     id: "IncomeExpense"
-- assertVisible: "การเพิ่มรายการใหม่"
+- assertVisible: "เพิ่มรายการใหม่"
 - tapOn:
     id: "Amount"
 - inputText: "100"

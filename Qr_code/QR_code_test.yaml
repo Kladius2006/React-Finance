@@ -8,6 +8,9 @@ appId: com.it_twins.Piggy_gold
 - tapOn:
     id: "input_Value"
 - inputText: "1000"
+- tapOn:
+    id: "phone_number"
+- inputText: "0808639147"
 - hideKeyboard
 
 - tapOn:

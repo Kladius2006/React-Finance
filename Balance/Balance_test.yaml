@@ -29,8 +29,19 @@ appId: com.it_twins.Piggy_gold
 
 - tapOn:
     id: "add_button"
-
+- hideKeyboard 
 - assertVisible: "ค่าห้อง"
-- assertVisible: "5000"
+- assertVisible: ".*5,?000.*"
 - assertVisible: "ค่าอาหาร"
-- assertVisible: "3000"
+- assertVisible: ".*3,?000.*"
+
+- tapOn:
+    id: "amount-ค่าอาหาร"
+- inputText: "200"
+- hideKeyboard 
+- assertVisible:
+    id: "save-spend-ค่าอาหาร"
+- tapOn:
+    id: "save-spend-ค่าอาหาร"
+
+- assertVisible: ".*200.*"
