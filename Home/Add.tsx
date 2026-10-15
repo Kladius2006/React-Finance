@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Pressable, TextInput, Alert } from 'react-native';
+import {addStyles} from './Add_styles'
 import { translations } from '../config/language';
 import { useLanguage } from '../config/LanguageContext';
 
@@ -19,6 +20,7 @@ type AddScreenProps = {
 
 export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenProps) {
   // การเปลี่ยนภาษา (ตั้งค่าเริ่มต้นเป็นภาษาไทย)
+  const styles = addStyles(textMultiplier);
   const { lang } = useLanguage(); 
   const t = translations[lang];
 
@@ -48,84 +50,6 @@ export default function AddScreen({ onSave, onBack, textMultiplier }: AddScreenP
     setType('expense');
     setDate(new Date().toISOString().split('T')[0]);
   };
-
-  const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  title: {
-    flex: 1,
-    fontSize: 22 * textMultiplier,
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-    header: {
-        flexDirection: 'row',
-        backgroundColor: '#2C3E50',
-        paddingVertical: 16,
-        paddingHorizontal: 18,
-        marginHorizontal: 16,
-        marginBottom: 12,
-        borderRadius: 16,
-        alignItems: 'center',
-        marginTop: 50,
-        elevation: 3,
-        shadowColor: '#183C2C',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.10,
-        shadowRadius: 6,
-        },
-  formContent: {
-    flex: 1,
-    marginTop: 15,
-    paddingHorizontal: 20,
-  },
-  label: { fontSize: 14 * textMultiplier, fontWeight: 'bold', color: '#2C3E50', marginBottom: 6 },
-  typeContainer: { flexDirection: 'row', gap: 10, marginBottom: 16 },
-  typeBtn: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 8,
-    backgroundColor: '#e0e0e0',
-    alignItems: 'center',
-  },
-  incomeActiveBtn: { backgroundColor: '#29a248' },
-  expenseActiveBtn: { backgroundColor: '#cb322a' },
-  typeBtnText: { fontWeight: 'bold', color: '#555' },
-  activeText: { color: '#ffffff' },
-  input: {
-    backgroundColor: '#ffffff',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    marginBottom: 14,
-    fontSize: 16,
-  },
-  saveButton: {
-    backgroundColor: '#346ca4',
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  saveButtonText: { color: 'white', fontSize: 16, fontWeight: 'bold' },
-  backButton: {
-    marginTop: 10,
-    paddingVertical: 12,
-    backgroundColor: '#8e8e93',
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  backButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  });
 
   return (
     <View style={styles.container}>
